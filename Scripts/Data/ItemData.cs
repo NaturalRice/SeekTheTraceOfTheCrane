@@ -8,11 +8,11 @@ public enum ItemType
     Seed_Carrot, // 胡萝卜种子类型
     Seed_Tomato, // 番茄种子类型
     Hoe, // 耙子工具类型
-    Book,
-    Painting1,
-    Painting2,
-    Painting3,
-    Painting4,
+    灵气,
+    齿轮,
+    红宝石,
+    绿宝石,
+    蓝宝石,
     Painting5,
     Painting6,
     Plant,

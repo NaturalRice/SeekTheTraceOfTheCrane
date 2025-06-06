@@ -66,12 +66,12 @@ public class Player : MonoBehaviour
             if (Input.GetKey(KeyCode.LeftShift))
             {
                 moveScale = 1;
-                moveSpeed = 2;
+                moveSpeed = 3;
             }
             else
             {
                 moveScale = 2;
-                moveSpeed = 5;
+                moveSpeed = 10;
             }
         }
         animator.SetFloat("MoveValue", moveScale);
@@ -153,12 +153,12 @@ public class Player : MonoBehaviour
         if (collider != null)
         {
             // 根据NPC的不同反应进行不同处理
-            if (collider.name == "程慕清")
+            if (collider.name == "灵机1")
             {
                 GameManager.Instance.canControlLuna = false;
                 GameManager.Instance.canWalkingNPC = false;
                 NPCDialog npcDialog = collider.GetComponent<NPCDialog>();
-                npcDialog.npcName = "程慕清"; // 设置npcName
+                npcDialog.npcName = "灵机1"; // 设置npcName
                 npcDialog.DisplayDialog();
             }
             else if (collider.name == "参观者1")

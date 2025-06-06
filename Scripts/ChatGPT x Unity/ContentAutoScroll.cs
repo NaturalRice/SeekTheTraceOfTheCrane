@@ -28,13 +28,6 @@ public class ContentAutoScroll : MonoBehaviour
         NPCDialog.onMessageReceived -= DelayScrollDown;
     }
 
-    // Update 方法每帧调用一次。
-    // 目前该方法不包含任何逻辑。
-    void Update()
-    {
-        // 目前该方法不包含任何逻辑。
-    }
-
     // DelayScrollDown 方法用于延迟滚动内容到底部。
     // 它使用 Invoke 方法在 0.3 秒后调用 ScrollDown 方法。
     private void DelayScrollDown()

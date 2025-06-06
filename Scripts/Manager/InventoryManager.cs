@@ -3,34 +3,34 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ¹ÜÀíÓÎÏ·ÖĞµÄÎïÆ·¿â´æÏµÍ³¡£
+/// ç®¡ç†æ¸¸æˆä¸­çš„ç‰©å“åº“å­˜ç³»ç»Ÿã€‚
 /// </summary>
 public class InventoryManager : MonoBehaviour
 {
     /// <summary>
-    /// »ñÈ¡ InventoryManager µÄµ¥ÀıÊµÀı¡£
+    /// è·å– InventoryManager çš„å•ä¾‹å®ä¾‹ã€‚
     /// </summary>
     public static InventoryManager Instance { get; private set; }
 
     /// <summary>
-    /// ´æ´¢ÎïÆ·ÀàĞÍºÍÎïÆ·Êı¾İµÄ×Öµä¡£
+    /// å­˜å‚¨ç‰©å“ç±»å‹å’Œç‰©å“æ•°æ®çš„å­—å…¸ã€‚
     /// </summary>
     private Dictionary<ItemType, ItemData> itemDataDict = new Dictionary<ItemType, ItemData>();
 
     /// <summary>
-    /// ±³°üµÄ¿â´æÊı¾İ¡£
+    /// èƒŒåŒ…çš„åº“å­˜æ•°æ®ã€‚
     /// </summary>
     [HideInInspector]
     public InventoryData backpack;
 
     /// <summary>
-    /// ¹¤¾ßÀ¸µÄ¿â´æÊı¾İ¡£
+    /// å·¥å…·æ çš„åº“å­˜æ•°æ®ã€‚
     /// </summary>
     [HideInInspector]
     public InventoryData toolbarData;
 
     /// <summary>
-    /// ÔÚ¶ÔÏó³õÊ¼»¯Ê±µ÷ÓÃ£¬ÉèÖÃ InventoryManager µÄµ¥ÀıÊµÀı²¢³õÊ¼»¯Êı¾İ¡£
+    /// åœ¨å¯¹è±¡åˆå§‹åŒ–æ—¶è°ƒç”¨ï¼Œè®¾ç½® InventoryManager çš„å•ä¾‹å®ä¾‹å¹¶åˆå§‹åŒ–æ•°æ®ã€‚
     /// </summary>
     private void Awake()
     {
@@ -39,27 +39,27 @@ public class InventoryManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ³õÊ¼»¯ÎïÆ·Êı¾İºÍ¿â´æÊı¾İ¡£
+    /// åˆå§‹åŒ–ç‰©å“æ•°æ®å’Œåº“å­˜æ•°æ®ã€‚
     /// </summary>
     private void Init()
     {
-        // ´Ó×ÊÔ´ÖĞ¼ÓÔØËùÓĞÎïÆ·Êı¾İ²¢Ìî³ä×Öµä
+        // ä»èµ„æºä¸­åŠ è½½æ‰€æœ‰ç‰©å“æ•°æ®å¹¶å¡«å……å­—å…¸
         ItemData[] itemDataArray = Resources.LoadAll<ItemData>("Data");
         foreach(ItemData data in itemDataArray)
         {
             itemDataDict.Add(data.type, data);
         }
 
-        // ¼ÓÔØ±³°üºÍ¹¤¾ßÀ¸µÄ¿â´æÊı¾İ
+        // åŠ è½½èƒŒåŒ…å’Œå·¥å…·æ çš„åº“å­˜æ•°æ®
         backpack = Resources.Load<InventoryData>("Data/Backpack");
         toolbarData = Resources.Load<InventoryData>("Data/Toolbar");
     }
 
     /// <summary>
-    /// ¸ù¾İÎïÆ·ÀàĞÍ»ñÈ¡ÎïÆ·Êı¾İ¡£
+    /// æ ¹æ®ç‰©å“ç±»å‹è·å–ç‰©å“æ•°æ®ã€‚
     /// </summary>
-    /// <param name="type">ÎïÆ·ÀàĞÍ¡£</param>
-    /// <returns>ÎïÆ·Êı¾İ£¬Èç¹ûÕÒ²»µ½Ôò·µ»Ø null¡£</returns>
+    /// <param name="type">ç‰©å“ç±»å‹ã€‚</param>
+    /// <returns>ç‰©å“æ•°æ®ï¼Œå¦‚æœæ‰¾ä¸åˆ°åˆ™è¿”å› nullã€‚</returns>
     private ItemData GetItemData(ItemType type)
     {
         ItemData data;
@@ -70,21 +70,21 @@ public class InventoryManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Äã´«µİµÄtype£º" + type + "²»´æÔÚ£¬ÎŞ·¨µÃµ½ÎïÆ·ĞÅÏ¢¡£");
+            Debug.LogWarning("ä½ ä¼ é€’çš„typeï¼š" + type + "ä¸å­˜åœ¨ï¼Œæ— æ³•å¾—åˆ°ç‰©å“ä¿¡æ¯ã€‚");
             return null;
         }
     }
 
     /// <summary>
-    /// ½«ÎïÆ·Ìí¼Óµ½±³°üÖĞ¡£
+    /// å°†ç‰©å“æ·»åŠ åˆ°èƒŒåŒ…ä¸­ã€‚
     /// </summary>
-    /// <param name="type">ÒªÌí¼ÓµÄÎïÆ·ÀàĞÍ¡£</param>
+    /// <param name="type">è¦æ·»åŠ çš„ç‰©å“ç±»å‹ã€‚</param>
     public void AddToBackpack(ItemType type)
     {
         ItemData item = GetItemData(type);
         if (item == null) return;
 
-        // ±éÀú±³°üÖĞµÄËùÓĞ²ÛÎ»£¬³¢ÊÔÌí¼ÓÎïÆ·
+        // éå†èƒŒåŒ…ä¸­çš„æ‰€æœ‰æ§½ä½ï¼Œå°è¯•æ·»åŠ ç‰©å“
         foreach(SlotData slotData in backpack.slotList)
         {
             if (slotData.item == item && slotData.CanAddItem())
@@ -94,7 +94,7 @@ public class InventoryManager : MonoBehaviour
             }
         }
 
-        // Èç¹ûÃ»ÓĞºÏÊÊµÄ²ÛÎ»£¬³¢ÊÔÕÒµ½¿Õ²ÛÎ»Ìí¼ÓÎïÆ·
+        // å¦‚æœæ²¡æœ‰åˆé€‚çš„æ§½ä½ï¼Œå°è¯•æ‰¾åˆ°ç©ºæ§½ä½æ·»åŠ ç‰©å“
         foreach (SlotData slotData in backpack.slotList)
         {
             if (slotData.count == 0)
@@ -104,6 +104,6 @@ public class InventoryManager : MonoBehaviour
             }
         }
 
-        Debug.LogWarning("ÎŞ·¨·ÅÈë²Ö¿â£¬ÄãµÄ±³°ü" + backpack + "ÒÑÂú¡£");
+        Debug.LogWarning("æ— æ³•æ”¾å…¥ä»“åº“ï¼Œä½ çš„èƒŒåŒ…" + backpack + "å·²æ»¡ã€‚");
     }
 }

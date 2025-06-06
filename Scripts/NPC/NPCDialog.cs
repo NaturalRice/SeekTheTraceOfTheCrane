@@ -22,7 +22,7 @@ public class NPCDialog : MonoBehaviour
     // 事件
     public static Action onMessageReceived;
 
-    // 认证信息
+    // 认证信息：提供Deepseek API
     [SerializeField] private string[] apiKey;
     private OpenAIClient api;
 
@@ -44,16 +44,18 @@ public class NPCDialog : MonoBehaviour
         // 创建初始消息气泡（该行用于测试）
         //CreateBubble($"你好！我叫{npcName}，是{npcRole}", false);
 
-        if (npcName == "欧阳晴晴") //给玩家介绍游戏操作方法
+        if (npcName == "Player") //给玩家介绍游戏操作方法
         {
-            CreateBubble($"程慕清短信通知我赶紧来博物馆，说有事需要我帮忙，不知道是什么事情？" +
-                         $"先进博物馆看看再说。", false);
-            CreateBubble($"提示：按WSAD上下左右移动，Esc键打开关闭背包，在NPC面前按空格键与其对话，" +
-                         $"按鼠标右键退出对话；" +
-                         $"而此面板代表的是你的想法，你心里的小九九，如果你的什么不懂的可以打字在这里，" +
-                         $"或者你有什么碎碎念的话，这里也是不错的情绪垃圾桶，说不定有意外之喜。最后，" +
+            CreateBubble($"欢迎来到灵机修真传，目前这个对话面板是游戏系统，当你遇到灵机时会开启新的独立对话面板，按鼠标左键滑动对话框可查看聊天记录", false);
+            CreateBubble($"提示：按WSAD上下左右移动，Esc键打开关闭背包，在灵机面前按空格键与其对话，" +
+                         $"按鼠标右键退出灵机对话；" +
+                         $"按数字键选择物品栏，鼠标左键挪动物品（虽然现在还用不了）；", false);
+            CreateBubble($"遇到敌人会开启战斗界面，别慌，如果连这种敌人都打不过那你也太...；" +
+                            $"如果你玩累了，按delete退出游戏；" +
                          $"按Tab键打开关闭本面板。", false);
             CreateBubble($"我知道你现在动不了，别急，按一下鼠标右键就可以动了", false);
+            CreateBubble($"找到你旁边的灵机小伙伴，在它面前按空格键对话，看看它有什么反应吧！", false);
+            CreateBubble($"灵机很胆小，走得很慢，注意多等等它哦(〃'▽'〃)", false);
         }
         
         // 进行认证
@@ -79,7 +81,10 @@ public class NPCDialog : MonoBehaviour
     /// </summary>
     private void Initialize()
     {
-        Message prompt = new Message(OpenAI.Role.System, $"你是一个名为{npcName}的{npcRole}，你的主要任务是{npcTask}。你的背景是{npcBackground}，性格特点是{npcPersonality}。");
+        Message prompt = new Message(OpenAI.Role.System, $"你是一个名为{npcName}的{npcRole}，" +
+                                                         $"你的主要任务是{npcTask}。" +
+                                                         $"你的背景是{npcBackground}，" +
+                                                         $"性格特点是{npcPersonality}。");
         chatPrompts.Add(prompt);
     }
     

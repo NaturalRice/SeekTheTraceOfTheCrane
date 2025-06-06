@@ -13,7 +13,7 @@ public class UIManager : MonoBehaviour
     public GameObject battlePanelGo;
     
     public GameObject TalkPanelGo0;//玩家
-    public GameObject TalkPanelGo1;//程慕清
+    public GameObject TalkPanelGo1;//灵机1
     public GameObject TalkPanelGo2;//参观者1
     public GameObject TalkPanelGo3;//参观者2
     public GameObject TalkPanelGo4;//参观者3
@@ -59,6 +59,12 @@ public class UIManager : MonoBehaviour
             if(GameManager.Instance.canControlLuna)
                 TalkPanelGo0.SetActive(!TalkPanelGo0.activeSelf);//玩家面板可随时打开关闭
 
+        // 检查玩家是否按下了Delete键
+        if (Input.GetKeyDown(KeyCode.Delete))
+        {
+            QuitGame();
+        }
+        
         if (Input.GetMouseButtonDown(1))
         {
             // 关闭对话面板
@@ -83,7 +89,7 @@ public class UIManager : MonoBehaviour
     {
         switch (name)
         {
-            case "程慕清":
+            case "灵机1":
                 TalkPanelGo1.SetActive(true);
                 break;
             case "参观者1":
@@ -105,5 +111,17 @@ public class UIManager : MonoBehaviour
                 TalkPanelGo0.SetActive(true);
                 break;
         }
+    }
+    
+    /// <summary>
+    /// 退出游戏
+    /// </summary>
+    private void QuitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false; // 在编辑器模式下停止播放
+#else
+    Application.Quit(); // 在发布的游戏中退出
+#endif
     }
 }
