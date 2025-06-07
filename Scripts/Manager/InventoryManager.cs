@@ -106,4 +106,44 @@ public class InventoryManager : MonoBehaviour
 
         Debug.LogWarning("无法放入仓库，你的背包" + backpack + "已满。");
     }
+    
+    /*private void OnApplicationQuit()
+    {
+        ResetWeaponDurability();
+    }
+
+#if UNITY_EDITOR
+    private void OnDestroy()
+    {
+        // 仅在编辑器模式下退出Play Mode时重置
+        if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode && 
+            !UnityEditor.EditorApplication.isPlaying)
+        {
+            ResetWeaponDurability();
+        }
+    }
+#endif
+
+    private void ResetWeaponDurability()
+    {
+        foreach (SlotData slot in backpack.slotList)
+        {
+            if (slot?.item?.isWeapon == true)
+            {
+                slot.currentDurability = slot.item.maxDurability;
+                slot.OnChange?.Invoke();
+            }
+        }
+        
+        foreach (SlotData slot in toolbarData.slotList)
+        {
+            if (slot?.item?.isWeapon == true)
+            {
+                slot.currentDurability = slot.item.maxDurability;
+                slot.OnChange?.Invoke();
+            }
+        }
+        
+        Debug.Log("武器耐久度已重置");
+    }*/
 }

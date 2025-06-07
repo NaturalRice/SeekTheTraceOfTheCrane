@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f78f82780ef2fb42bd12c28fa6ea669, type: 3}
   m_Name: Coins
   m_EditorClassIdentifier: 
-  type: 18
+  type: 9
   sprite: {fileID: -1686339268, guid: 0c0d7db5003504649b27971d6765a246, type: 3}
   prefab: {fileID: 4564859177430713250, guid: e379e92d86c3e664581bb26305907d51, type: 3}
   maxCount: 99
+  isWeapon: 0
+  damage: 10
+  attackSpeed: 1

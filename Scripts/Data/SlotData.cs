@@ -123,7 +123,7 @@ public class SlotData
     [Header("Weapon Properties")]
     public int durability = 100; // 武器耐久度
     
-    public void ReduceDurability(int amount)
+    public void ReduceDurability(int amount)//耐久度有问题，暂时禁用，待修复
     {
         if (item != null && item.isWeapon)
         {
