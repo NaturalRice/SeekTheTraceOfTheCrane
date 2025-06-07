@@ -30,7 +30,7 @@ public class Candle : MonoBehaviour
         GameManager.Instance.PlaySound(pickClip);
         // 销毁碰撞的GameObjec（已注释掉）
         //Destroy(collision.gameObject);
-        // 销毁当前蜡烛GameObjec
+        // 销毁当前蜡烛GameObject
         Destroy(gameObject);
     }
 }

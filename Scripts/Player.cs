@@ -19,8 +19,23 @@ public class Player : MonoBehaviour
     private Vector2 move;
     // 工具栏UI
     public ToolbarUI toolbarUI;
+    //武器攻击
+    [Header("Combat")]
+    public float attackRange = 1.5f; // 攻击范围
+    public float attackCooldown = 0.5f; // 攻击冷却时间
+    // 强制使用 LayerMask：
+    [SerializeField] 
+    private string enemyLayerName = "Enemy";
+    private int enemyLayerMask;
     
-    public GameManager gameManager;
+    private float lastAttackTime = -10f; // 上次攻击时间
+    private bool isAttacking = false; // 是否正在攻击
+    
+    [Header("Effects")]
+    public GameObject attackEffectPrefab;
+    public Transform attackPoint; // 攻击效果生成点
+    // 击中声音
+    public AudioClip hitSound;
 
     // 在游戏开始前初始化组件
     private void Start()
@@ -30,6 +45,8 @@ public class Player : MonoBehaviour
 
         // 获取角色的Animator组件
         animator = GetComponentInChildren<Animator>();
+        
+        enemyLayerMask = LayerMask.GetMask(enemyLayerName);
     }
 
     // Update is called once per frame
@@ -89,27 +106,112 @@ public class Player : MonoBehaviour
             PlantManager.Instance.HoeGround(transform.position);
             //animator.SetTrigger("hoe");
         }
-        /*if (toolbarUI != null)
+        
+        // 添加攻击检测
+        CheckAttack();
+    }
+    //攻击
+    private void CheckAttack()
+    {
+        // 检查当前选中的工具栏物品是否为破旧的短剑
+        ToolbarSlotUI selectedSlot = toolbarUI.GetSelectedSlotUI();
+        if (selectedSlot != null && selectedSlot.GetData() != null && 
+            selectedSlot.GetData().item != null && 
+            selectedSlot.GetData().item.type == ItemType.破旧的短剑)
         {
-            ToolbarSlotUI selectedSlotUI = toolbarUI.GetSelectedSlotUI();
-            if (selectedSlotUI != null && selectedSlotUI.GetData() != null)
+            // 按住鼠标左键且不在冷却期
+            if (Input.GetMouseButton(0) && Time.time >= lastAttackTime + attackCooldown)
             {
-                if (selectedSlotUI.GetData().item.type == ItemType.Hoe && Input.GetKeyDown(KeyCode.Space))
-                {
-                    Debug.Log("Hoe key pressed and Hoe is selected. Calling HoeGround.");
-                    PlantManager.Instance.HoeGround(transform.position);
-                    animator.SetTrigger("hoe");
-                }
+                Attack();
             }
-            else
-            {
-                Debug.Log("Selected SlotUI or its data is null.");
-            }
+        }
+    }
+
+    private void Attack()
+    {
+        lastAttackTime = Time.time;
+        isAttacking = true;
+        
+        // 1. 播放攻击动画
+        animator.SetTrigger("Attack");
+        
+        // 2. 生成攻击特效
+        if (attackEffectPrefab && attackPoint)
+        {
+            Instantiate(attackEffectPrefab, attackPoint.position, attackPoint.rotation);
+            Debug.Log($"攻击特效生成于: {attackPoint.position}");
         }
         else
         {
-            Debug.Log("toolbarUI is null.");
-        }*/
+            Debug.LogError("攻击效果预制体或攻击点未设置!");
+        }
+        
+        // 3. 播放攻击音效
+        if (hitSound)
+        {
+            GameManager.Instance.PlaySound(hitSound);
+        }
+        
+        // 4. 检测敌人,使用正确的2D物理检测方法
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayerMask);
+        Debug.Log($"检测到{hitEnemies.Length}个敌人");
+    
+        foreach (Collider2D enemy in hitEnemies)
+        {
+            Debug.Log($"击中: {enemy.name}", enemy.gameObject);
+        }
+        
+        // 5. 对敌人造成伤害
+        foreach (Collider2D enemy in hitEnemies)
+        {
+            EnemyController enemyCtrl = enemy.GetComponent<EnemyController>();
+            if (enemyCtrl != null)
+            {
+                enemyCtrl.TakeDamage(10);
+                Debug.Log($"对 {enemy.name} 造成伤害", enemy.gameObject);
+            }
+        }
+        
+        // 重置攻击状态
+        StartCoroutine(ResetAttackState());
+        
+        
+        // 减少武器耐久度
+        SlotData weaponSlot = toolbarUI.GetSelectedSlotUI().GetData();
+        if (weaponSlot != null && weaponSlot.item.isWeapon)
+        {
+            weaponSlot.ReduceDurability(1);
+        }
+    }
+    //重置攻击状态
+    private IEnumerator ResetAttackState()
+    {
+        yield return new WaitForSeconds(0.2f);
+        isAttacking = false;
+    }
+    
+    // 可选：在编辑器中可视化攻击范围
+    private void OnDrawGizmosSelected()
+    {
+        if (attackPoint != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+        }
+        
+        // 检测并标记所有在攻击范围内的敌人
+        Collider2D[] enemies = Physics2D.OverlapCircleAll(transform.position, attackRange, enemyLayerMask);
+        Gizmos.color = Color.yellow;
+        foreach (Collider2D enemy in enemies)
+        {
+            Gizmos.DrawLine(transform.position, enemy.transform.position);
+        }
+        //绘制调试图形
+        if (attackPoint != null)
+        {
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawWireSphere(attackPoint.position, 0.2f);
+        }
     }
 
     private void FixedUpdate()
@@ -199,7 +301,7 @@ public class Player : MonoBehaviour
                 npcDialog.npcName = "程老"; // 设置npcName
                 npcDialog.DisplayDialog();
             }
-            else if (collider.name == "Dog" 
+            /*else if (collider.name == "Dog" 
                      && !GameManager.Instance.hasPetTheDog &&
                      GameManager.Instance.dialogInfoIndex == 2)
             {
@@ -207,7 +309,7 @@ public class Player : MonoBehaviour
                 GameManager.Instance.canControlLuna = false;
                 GameManager.Instance.canWalkingNPC = false;
                 collider.GetComponent<Dog>().BeHappy();
-            }
+            }*/
         }
     }
     

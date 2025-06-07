@@ -47,4 +47,20 @@ public class ToolbarSlotUI : SlotUI
     {
         image.sprite = slotLight;
     }
+    
+    public Image cooldownOverlay;
+    
+    //攻击冷却指示器
+    /*private void Update()
+    {
+        if (cooldownOverlay != null && GetData() != null && GetData().item != null && GetData().item.isWeapon)
+        {
+            Player player = FindObjectOfType<Player>();
+            if (player != null)
+            {
+                float cooldownPercent = Mathf.Clamp01((Time.time - player.lastAttackTime) / player.attackCooldown);
+                cooldownOverlay.fillAmount = 1 - cooldownPercent;
+            }
+        }
+    }*/
 }

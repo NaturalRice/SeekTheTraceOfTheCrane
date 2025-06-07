@@ -104,4 +104,17 @@ public class ToolbarUI : MonoBehaviour
             }
         }
     }
+    
+    // 添加方法获取当前选中武器
+    public ItemData GetSelectedWeapon()
+    {
+        if (selectedSlotUI != null && 
+            selectedSlotUI.GetData() != null && 
+            selectedSlotUI.GetData().item != null && 
+            selectedSlotUI.GetData().item.isWeapon)
+        {
+            return selectedSlotUI.GetData().item;
+        }
+        return null;
+    }
 }

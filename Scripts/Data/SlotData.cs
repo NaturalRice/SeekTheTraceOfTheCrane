@@ -119,4 +119,20 @@ public class SlotData
     {
         this.OnChange = OnChange;
     }
+    
+    [Header("Weapon Properties")]
+    public int durability = 100; // 武器耐久度
+    
+    public void ReduceDurability(int amount)
+    {
+        if (item != null && item.isWeapon)
+        {
+            durability -= amount;
+            if (durability <= 0)
+            {
+                Clear(); // 耐久度为0时销毁武器
+            }
+            OnChange?.Invoke();
+        }
+    }
 }

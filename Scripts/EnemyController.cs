@@ -19,11 +19,33 @@ public class EnemyController : MonoBehaviour
 
     public delegate void OnDeathHandler();
     public event OnDeathHandler OnDeath;
-
-    private void OnDestroy()
+    
+    public int health = 50; // 敌人生命值
+    //敌人受伤
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
+        if (health <= 0)
+        {
+            Die();
+        }
+        else
+        {
+            // 播放受伤动画
+            animator.SetTrigger("Hit");
+        }
+    }
+    //敌人死亡
+    private void Die()
     {
         // 触发死亡事件
         OnDeath?.Invoke();
+        
+        // 播放死亡动画
+        animator.SetTrigger("Die");
+        
+        // 销毁敌人
+        Destroy(gameObject, 1f);
     }
 
     // 在游戏开始前初始化组件
