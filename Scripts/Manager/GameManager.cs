@@ -8,7 +8,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    public GameObject battleGo;//战斗场景游戏物体
+    //public GameObject battleGo;//战斗场景游戏物体
     //luna属性
     public int lunaHP;//最大生命值
     public float lunaCurrentHP;//Luna的当前生命值
@@ -24,8 +24,7 @@ public class GameManager : MonoBehaviour
     public int killNum;
     public GameObject monstersGo;
     public NPCDialog npc;
-    public bool enterBattle;
-    public GameObject battleMonsterGo;
+    //public GameObject battleMonsterGo;
     public AudioSource audioSource;
     public AudioClip normalClip;
     public AudioClip battleClip;
@@ -48,20 +47,16 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (!enterBattle)
+        if (lunaCurrentMP <= 100)
         {
-            if (lunaCurrentMP <= 100)
-            {
-                AddOrDecreaseMP(Time.deltaTime);
-            }
-            if (lunaCurrentHP <= 100)
-            {
-                AddOrDecreaseHP(Time.deltaTime);
-            }
-            
-            // 每帧尝试生成怪物
-            TrySpawnMonsters();
+            AddOrDecreaseMP(Time.deltaTime);
         }
+        if (lunaCurrentHP <= 100)
+        {
+            AddOrDecreaseHP(Time.deltaTime);
+        }
+
+        TrySpawnMonsters();
     }
 
     //public void ChangeHeath(int amount)
@@ -72,37 +67,21 @@ public class GameManager : MonoBehaviour
 
     public void EnterOrExitBattle(bool enter = true, int addKillNum = 0)
     {
-        UIManager.Instance.ShowOrHideBattlePanel(enter);
-        battleGo.SetActive(enter);
         if (!enter)//非战斗状态，或者说战斗结束
         {
             killNum += addKillNum;
-            if (addKillNum > 0)
-            {
-                DestoryMonster();
-            }
             monsterCurrentHP = 50;
-            PlayMusic(normalClip);
+            //PlayMusic(normalClip);
             if (lunaCurrentHP <= 0)
             {
                 lunaCurrentHP = 100;
                 lunaCurrentMP = 0;
-                battleMonsterGo.transform.position += new Vector3(0, 2, 0);
             }
         }
         else
         {
-            PlayMusic(battleClip);
+            //PlayMusic(battleClip);
         }
-        enterBattle = enter;
-    }
-    public void DestoryMonster()
-    {
-        Destroy(battleMonsterGo);
-    }
-    public void SetMonster(GameObject go)
-    {
-        battleMonsterGo = go;
     }
 
     /// <summary>
@@ -119,6 +98,7 @@ public class GameManager : MonoBehaviour
         if (lunaCurrentHP<=0)
         {
             lunaCurrentHP = 0;
+            PlayerDied();
         }
         UIManager.Instance.SetHPValue(lunaCurrentHP/lunaHP);
     }
@@ -207,5 +187,42 @@ public class GameManager : MonoBehaviour
             spawnedMonsters.Remove(monster);
             Destroy(monster);
         };
+    }
+    
+    /// <summary>
+    /// 玩家死亡时调用
+    /// </summary>
+    public void PlayerDied()
+    {
+        // 播放死亡音效
+        PlaySound(audioSource.clip);
+
+        // 停止所有怪物的移动
+        foreach (Transform child in monstersGo.transform)
+        {
+            EnemyController enemy = child.GetComponent<EnemyController>();
+            if (enemy != null)
+            {
+                enemy.enabled = false;
+            }
+        }
+
+        // 停止玩家控制
+        canControlLuna = false;
+
+        // 退出游戏
+        ExitGame();
+    }
+
+    /// <summary>
+    /// 退出游戏
+    /// </summary>
+    private void ExitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false; // 在编辑器模式下停止播放
+#else
+        Application.Quit(); // 在发布的游戏中退出
+#endif
     }
 }

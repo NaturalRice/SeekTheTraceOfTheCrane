@@ -19,6 +19,8 @@ public class Player : MonoBehaviour
     private Vector2 move;
     // 工具栏UI
     public ToolbarUI toolbarUI;
+    
+    public GameManager gameManager;
 
     // 在游戏开始前初始化组件
     private void Start()
@@ -34,10 +36,6 @@ public class Player : MonoBehaviour
     void Update()
     {
         // 检查游戏状态，如果进入战斗或不能控制Luna，则退出更新
-        if (GameManager.Instance.enterBattle)
-        {
-            return;
-        }
         if (!GameManager.Instance.canControlLuna)
         {
             return;
@@ -117,10 +115,10 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         // 检查游戏状态，如果进入战斗，则退出更新
-        if (GameManager.Instance.enterBattle)
+        /*if (GameManager.Instance.enterBattle)
         {
             return;
-        }
+        }*/
         Vector2 position = transform.position;
         //position.x = position.x + moveSpeed * horizontal * Time.deltaTime;
         //position.y = position.y + moveSpeed * vertical * Time.deltaTime;

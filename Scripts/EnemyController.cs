@@ -39,10 +39,6 @@ public class EnemyController : MonoBehaviour
     // 每帧更新逻辑，主要用于控制敌人的方向改变
     void Update()
     {
-        if (GameManager.Instance.enterBattle)
-        {
-            return;
-        }
         timer -= Time.deltaTime;
         if (timer <= 0)
         {
@@ -56,10 +52,6 @@ public class EnemyController : MonoBehaviour
     // 固定更新逻辑，主要用于控制敌人的移动
     private void FixedUpdate()
     {
-        if (GameManager.Instance.enterBattle)
-        {
-            return;
-        }
         Vector3 pos = rigidbody2d.position;
         pos += (Vector3)moveDirection * speed * Time.fixedDeltaTime;
         rigidbody2d.MovePosition(pos);
@@ -80,7 +72,7 @@ public class EnemyController : MonoBehaviour
         if (collision.transform.CompareTag("Player"))
         {
             GameManager.Instance.EnterOrExitBattle();
-            GameManager.Instance.SetMonster(gameObject);
+            GameManager.Instance.AddOrDecreaseHP(-20); // 假设敌人接触玩家时造成20点伤害
         }
     }
 }

@@ -1,11 +1,8 @@
-游戏对象: Monster
+游戏对象: Tilemap
 - 组件:
   - Transform
-  - SpriteRenderer
-  - Rigidbody2D
-  - BoxCollider2D
-  - EnemyController
-  - Animator
+  - Tilemap
+  - TilemapRenderer
 
 游戏对象: CountText
 - 组件:
@@ -1290,7 +1287,6 @@
   - 组件:
     - Transform
     - SpriteRenderer
-    - BattleController
 
 游戏对象: Frame
 - 组件:
@@ -1520,14 +1516,6 @@
 游戏对象: Monsters
 - 组件:
   - Transform
-子对象: Monster
-  - 组件:
-    - Transform
-    - SpriteRenderer
-    - Rigidbody2D
-    - BoxCollider2D
-    - EnemyController
-    - Animator
 
 游戏对象: Bg
 - 组件:
@@ -1861,6 +1849,11 @@
 游戏对象: Interactable
 - 组件:
   - Transform
+子对象: Tilemap
+  - 组件:
+    - Transform
+    - Tilemap
+    - TilemapRenderer
 
 游戏对象: Scroll View
 - 组件:
