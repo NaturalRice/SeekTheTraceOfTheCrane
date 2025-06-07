@@ -29,6 +29,12 @@ public class GameManager : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip normalClip;
     public AudioClip battleClip;
+    
+    public GameObject monsterPrefab; // 怪物的预制体
+    public Transform playerTransform; // 玩家的位置
+    public int maxMonsters = 5; // 最大怪物数量
+    public float spawnRadius = 15.0f; // 怪物生成的半径
+    private List<GameObject> spawnedMonsters = new List<GameObject>(); // 已生成的怪物列表
 
     private void Awake()
     {
@@ -52,6 +58,9 @@ public class GameManager : MonoBehaviour
             {
                 AddOrDecreaseHP(Time.deltaTime);
             }
+            
+            // 每帧尝试生成怪物
+            TrySpawnMonsters();
         }
     }
 
@@ -175,5 +184,28 @@ public class GameManager : MonoBehaviour
         {
             audioSource.PlayOneShot(audioClip);
         }
+    }
+    
+    
+    public void TrySpawnMonsters()
+    {
+        // 如果已生成的怪物数量达到最大值，不再生成
+        if (spawnedMonsters.Count >= maxMonsters)
+        {
+            return;
+        }
+
+        // 随机生成怪物的位置
+        Vector2 randomPosition2D = Random.insideUnitCircle.normalized * spawnRadius;
+        Vector3 randomPosition = new Vector3(randomPosition2D.x, randomPosition2D.y, 0);
+        GameObject monster = Instantiate(monsterPrefab, playerTransform.position + randomPosition, Quaternion.identity);
+        spawnedMonsters.Add(monster);
+
+        // 设置怪物的死亡回调，以便从列表中移除
+        monster.GetComponent<EnemyController>().OnDeath += () =>
+        {
+            spawnedMonsters.Remove(monster);
+            Destroy(monster);
+        };
     }
 }

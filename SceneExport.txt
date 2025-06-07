@@ -1,3 +1,12 @@
+游戏对象: Monster
+- 组件:
+  - Transform
+  - SpriteRenderer
+  - Rigidbody2D
+  - BoxCollider2D
+  - EnemyController
+  - Animator
+
 游戏对象: CountText
 - 组件:
   - RectTransform
@@ -1511,6 +1520,14 @@
 游戏对象: Monsters
 - 组件:
   - Transform
+子对象: Monster
+  - 组件:
+    - Transform
+    - SpriteRenderer
+    - Rigidbody2D
+    - BoxCollider2D
+    - EnemyController
+    - Animator
 
 游戏对象: Bg
 - 组件:

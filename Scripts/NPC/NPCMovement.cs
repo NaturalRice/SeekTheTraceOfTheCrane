@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NPCMovement : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 2.0f; // NPC移动速度
+    [SerializeField] private float moveSpeed = 10.0f; // NPC移动速度
     [SerializeField] private float followDistance = 5.0f; // 跟随距离阈值
     [SerializeField] private float followSpeed = 3.0f; // 跟随时的速度
     [SerializeField] private float stopDistance = 1.0f; // 停止距离阈值

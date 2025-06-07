@@ -148,7 +148,7 @@ public class Player : MonoBehaviour
     {
         // 检测角色周围是否有NPC
         Collider2D collider = Physics2D.OverlapCircle(rigidbody2d.position, 
-            0.5f, LayerMask.GetMask("NPC"));
+            1f, LayerMask.GetMask("NPC"));
         
         if (collider != null)
         {
