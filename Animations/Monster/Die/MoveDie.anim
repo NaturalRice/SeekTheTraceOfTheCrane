@@ -35,7 +35,7 @@ AnimationClip:
     - time: 0.5
       value: {fileID: 2136447599, guid: ab35db999c8382d46b0d4904769951f8, type: 3}
     - time: 0.5833333
-      value: {fileID: 240760266, guid: ab35db999c8382d46b0d4904769951f8, type: 3}
+      value: {fileID: 952089802, guid: ab35db999c8382d46b0d4904769951f8, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -65,7 +65,7 @@ AnimationClip:
     - {fileID: -1288396609, guid: ab35db999c8382d46b0d4904769951f8, type: 3}
     - {fileID: 698686064, guid: ab35db999c8382d46b0d4904769951f8, type: 3}
     - {fileID: 2136447599, guid: ab35db999c8382d46b0d4904769951f8, type: 3}
-    - {fileID: 240760266, guid: ab35db999c8382d46b0d4904769951f8, type: 3}
+    - {fileID: 952089802, guid: ab35db999c8382d46b0d4904769951f8, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
@@ -90,4 +90,11 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 0.5833333
+    functionName: DelayedDestroy
+    data: 
+    objectReferenceParameter: {fileID: 11500000, guid: e2a33b28d37e0e9489c477bb04a5f379, type: 3}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0

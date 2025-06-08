@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;  // 这是标准UI组件的命名空间
+
 
 public class EnemyController : MonoBehaviour
 {
@@ -22,21 +24,47 @@ public class EnemyController : MonoBehaviour
     //判定死亡
     private bool isDead = false;
     
-    public int health = 50; // 敌人生命值
+    //敌人血条与蓝条
+    [Header("Health UI Settings")]
+    public float healthBarWidth = 100f; // 血条原始宽度，与玩家血条一致
+    public float manaBarWidth = 100f; // 蓝条原始宽度，与玩家蓝条一致
+    private Image healthFill; // 血条填充Image
+    private Image manaFill; // 魔法条填充Image
     
+    public GameObject healthBarPrefab;
+    public Transform uiAnchorPoint; // 血条悬挂点
+    
+    private GameObject healthBarInstance;
+    
+    public float health = 100f; // 敌人生命值
+    public float mana = 100f; // 敌人魔法值
+    
+    private Canvas enemyHealthCanvas; // 敌人血条Canvas
+    
+    // 添加血条显示/隐藏控制
+    private bool isHealthBarVisible = false;
     
     //敌人受伤
     public void TakeDamage(int damage)
     {
-        StartCoroutine(FlashRed()); // 受伤闪红
-        
         if (isDead) return;
-        
-        // 触发受击动画
-        animator.SetTrigger("Hit");
-        
+    
         // 扣血逻辑
-        health -= damage;
+        // 使用与玩家相同的血量限制方式
+        health = Mathf.Clamp(health - damage, 0, healthBarWidth);
+    
+        Debug.Log($"Enemy took {damage} damage. Current health: {health}");
+    
+        // 显示血条
+        ShowHealthBar(true);
+    
+        // 更新UI
+        UpdateHealthUI();
+    
+        // 受伤效果:闪红
+        StartCoroutine(FlashRed());
+        animator.SetTrigger("Hit");
+    
         if (health <= 0)
         {
             Die();
@@ -109,6 +137,91 @@ public class EnemyController : MonoBehaviour
             }
         }
     }
+    
+    private void UpdateHealthUI()
+    {
+        // 添加调试日志
+        if(healthFill != null)
+        {
+            float fillPercent = (health / healthBarWidth)*10;
+            
+            // 使用与玩家相同的宽度调整方式
+            healthFill.rectTransform.SetSizeWithCurrentAnchors(
+                RectTransform.Axis.Horizontal, 
+                fillPercent * healthBarWidth
+            );
+            
+            // 使用与玩家完全相同的颜色渐变逻辑
+            UpdateHealthColor(fillPercent);
+        }
+
+        // 可选: 更新魔法条
+        if(manaFill != null)
+        {
+            float fillPercent = (mana / manaBarWidth)*5;
+            
+            // 使用与玩家相同的宽度调整方式
+            manaFill.rectTransform.SetSizeWithCurrentAnchors(
+                RectTransform.Axis.Horizontal, 
+                fillPercent * manaBarWidth
+            );
+            
+            // 使用与玩家完全相同的颜色渐变逻辑
+            UpdateHealthColor(fillPercent);
+        }
+        
+        Debug.Log($"Updating Enemy Health: {health}/{healthBarWidth}");//调试时使用
+    }
+    
+    // 复制玩家的颜色变化逻辑
+    private void UpdateHealthColor(float fillPercent)
+    {
+        if(healthFill == null) return;
+        
+        Color targetColor;
+        
+        if(fillPercent > 0.5f)
+        {
+            // 血量>50%：绿→黄渐变
+            float lerpValue = (fillPercent - 0.5f) * 2;
+            targetColor = Color.Lerp(Color.yellow, Color.green, lerpValue);
+        }
+        else
+        {
+            // 血量≤50%：黄→红渐变
+            float lerpValue = fillPercent * 2;
+            targetColor = Color.Lerp(Color.red, Color.yellow, lerpValue);
+        }
+        
+        healthFill.color = targetColor;
+    }
+
+    private void OnDestroy()
+    {
+        if (healthBarInstance != null) 
+            Destroy(healthBarInstance);
+    }
+
+    public void ShowHealthBar(bool show)
+    {
+        if(healthBarInstance != null)
+        {
+            healthBarInstance.SetActive(show);
+            isHealthBarVisible = show;
+        
+            // 显示3秒后自动隐藏(可选)
+            if(show) Invoke("HideHealthBar", 3f);
+        }
+    }
+
+    private void HideHealthBar()
+    {
+        if(!isDead) // 如果敌人还活着才隐藏
+        {
+            healthBarInstance.SetActive(false);
+            isHealthBarVisible = false;
+        }
+    }
 
     // 在游戏开始前初始化组件
     void Start()
@@ -118,6 +231,40 @@ public class EnemyController : MonoBehaviour
         // 初始随机方向和时间
         SetRandomDirection();
         timer = Random.Range(changeTime * 0.5f, changeTime * 1.5f);
+        
+        // 实例化血条
+        if(healthBarPrefab != null)
+        {
+            healthBarInstance = Instantiate(healthBarPrefab, transform);
+            healthBarInstance.transform.localPosition = Vector3.up * 1.5f;
+        
+            // 获取组件引用
+            Transform healthMask = healthBarInstance.transform.Find("HealthMask");
+            Transform manaMask = healthBarInstance.transform.Find("ManaMask");
+            if(healthMask != null)
+            {
+                healthFill = healthMask.GetComponentInChildren<Image>(true);
+                manaFill = manaMask.GetComponentInChildren<Image>(true);
+            
+                // 初始化血条和蓝条宽度
+                if(healthFill != null)
+                {
+                    healthFill.rectTransform.SetSizeWithCurrentAnchors(
+                        RectTransform.Axis.Horizontal, 
+                        healthBarWidth
+                    );
+                }
+                if (manaFill != null)
+                {
+                    manaFill.rectTransform.SetSizeWithCurrentAnchors(
+                        RectTransform.Axis.Horizontal, 
+                        manaBarWidth
+                    );
+                }
+            }
+            
+            UpdateHealthUI();
+        }
     }
 
     // 每帧更新逻辑，主要用于控制敌人的方向改变
@@ -130,6 +277,16 @@ public class EnemyController : MonoBehaviour
             SetRandomDirection();
             // 随机改变时间间隔
             timer = Random.Range(changeTime * 0.5f, changeTime * 1.5f);
+        }
+        
+        // 更新血条位置
+        if (healthBarInstance != null && uiAnchorPoint != null)
+        {
+            // 保持血条在敌人上方固定位置
+            healthBarInstance.transform.position = uiAnchorPoint.position + Vector3.up * 1.5f;
+        
+            // 确保血条始终面向相机
+            healthBarInstance.transform.rotation = Camera.main.transform.rotation;
         }
     }
 

@@ -18829,6 +18829,7 @@ MonoBehaviour:
   TalkPanelGo4: {fileID: 1553265788}
   TalkPanelGo5: {fileID: 1093004379}
   TalkPanelGo6: {fileID: 230920207}
+  hpColorImage: {fileID: 1139868344020026297}
 --- !u!114 &1619889450
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114841,7 +114842,7 @@ MonoBehaviour:
   audioSource: {fileID: 1926263497}
   normalClip: {fileID: 8300000, guid: 63b994a05867d7343a61684bc7dad6b2, type: 3}
   battleClip: {fileID: 8300000, guid: ebc9a58365cc8dd4380c9c3f22a5ef8e, type: 3}
-  monsterPrefab: {fileID: 6246619358622511009, guid: e812e78f571fba146b1bb3888c7aa940, type: 3}
+  monsterPrefab: {fileID: 3694813673302226702, guid: e812e78f571fba146b1bb3888c7aa940, type: 3}
   playerTransform: {fileID: 3958843442659494231}
   maxMonsters: 5
   spawnRadius: 10
@@ -117740,7 +117741,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.4303999, b: 0, a: 1}
+  m_Color: {r: 0, g: 1, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

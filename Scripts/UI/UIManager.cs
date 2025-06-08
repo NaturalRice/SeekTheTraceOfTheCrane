@@ -19,6 +19,8 @@ public class UIManager : MonoBehaviour
     public GameObject TalkPanelGo4;//参观者3
     public GameObject TalkPanelGo5;//参观者4
     public GameObject TalkPanelGo6;//程老
+    
+    public Image hpColorImage; // 新增-用于颜色变化的血条图
 
     void Awake()
     {
@@ -33,8 +35,34 @@ public class UIManager : MonoBehaviour
     /// <param name="fillPercent">填充百分比</param>
     public void SetHPValue(float fillPercent)
     {
+        // 1. 更新血条长度
         hpMaskImage.rectTransform.SetSizeWithCurrentAnchors(
-            RectTransform.Axis.Horizontal, fillPercent * originalSize);
+            RectTransform.Axis.Horizontal, 
+            fillPercent * originalSize
+        );
+        
+        // 2. 动态调整血条颜色
+        UpdateHPColor(fillPercent);
+    }
+    
+    private void UpdateHPColor(float fillPercent)
+    {
+        Color targetColor;
+        
+        if (fillPercent > 0.5f)
+        {
+            // 血量>50%：绿→黄渐变
+            float lerpValue = (fillPercent - 0.5f) * 2; // 映射到0-1
+            targetColor = Color.Lerp(Color.yellow, Color.green, lerpValue);
+        }
+        else
+        {
+            // 血量≤50%：黄→红渐变
+            float lerpValue = fillPercent * 2; // 映射到0-1
+            targetColor = Color.Lerp(Color.red, Color.yellow, lerpValue);
+        }
+
+        hpColorImage.color = targetColor;
     }
 
     /// <summary>
