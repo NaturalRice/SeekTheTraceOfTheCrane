@@ -23,6 +23,8 @@ public class EnemyController : MonoBehaviour
     private bool isDead = false;
     
     public int health = 50; // 敌人生命值
+    
+    
     //敌人受伤
     public void TakeDamage(int damage)
     {
@@ -50,6 +52,9 @@ public class EnemyController : MonoBehaviour
         
         // 2. 禁用碰撞器
         GetComponent<Collider2D>().enabled = false;
+        
+        // 3. 生成掉落物
+        GenerateDrops(); 
     }
     
     // 由动画事件调用的方法
@@ -66,6 +71,43 @@ public class EnemyController : MonoBehaviour
         sr.color = Color.red;
         yield return new WaitForSeconds(0.1f);
         sr.color = original;
+    }
+    
+    //概率掉落系统：敌人掉落物清单
+    [System.Serializable]
+    public class DropItem
+    {
+        public GameObject prefab;
+        [Range(0, 1)] public float chance = 0.5f;
+        public int minAmount = 1;
+        public int maxAmount = 1;
+    }
+
+    public List<DropItem> possibleDrops = new List<DropItem>(); // 在编辑器中配置多种掉落物
+    
+    private void GenerateDrops()
+    {
+        foreach (var drop in possibleDrops)
+        {
+            // 概率检查（确保Random.value在0-1之间）
+            float roll = Random.Range(0f, 1f);
+            Debug.Log($"Checking {drop.prefab.name} - Roll: {roll} vs Chance: {drop.chance}");
+        
+            if (roll <= drop.chance && drop.prefab != null)
+            {
+                // 数量随机
+                int amount = Random.Range(drop.minAmount, drop.maxAmount + 1);
+                for (int i = 0; i < amount; i++)
+                {
+                    Vector3 offset = new Vector3(
+                        Random.Range(-0.5f, 0.5f), 
+                        Random.Range(0, 0.5f), 
+                        0
+                    );
+                    Instantiate(drop.prefab, transform.position + offset, Quaternion.identity);
+                }
+            }
+        }
     }
 
     // 在游戏开始前初始化组件

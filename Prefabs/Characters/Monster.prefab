@@ -175,6 +175,22 @@ MonoBehaviour:
   speed: 1
   changeTime: 5
   health: 50
+  dropPrefab: {fileID: 4564859177430713250, guid: c3d7dbb812be50340916b47792f1a7ad, type: 3}
+  dropAmount: 1
+  dropSpread: {x: 0.5, y: 1}
+  possibleDrops:
+  - prefab: {fileID: 4564859177430713250, guid: c3d7dbb812be50340916b47792f1a7ad, type: 3}
+    chance: 1
+    minAmount: 1
+    maxAmount: 5
+  - prefab: {fileID: 4564859177430713250, guid: 53001a118d97903408a7a1395a075cd0, type: 3}
+    chance: 0.05
+    minAmount: 1
+    maxAmount: 1
+  - prefab: {fileID: 4564859177430713250, guid: 98990cc8f745259498553207005e7937, type: 3}
+    chance: 0.01
+    minAmount: 1
+    maxAmount: 3
 --- !u!95 &5249346359468677763
 Animator:
   serializedVersion: 5
