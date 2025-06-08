@@ -19,33 +19,53 @@ public class EnemyController : MonoBehaviour
 
     public delegate void OnDeathHandler();
     public event OnDeathHandler OnDeath;
+    //判定死亡
+    private bool isDead = false;
     
     public int health = 50; // 敌人生命值
     //敌人受伤
     public void TakeDamage(int damage)
     {
+        StartCoroutine(FlashRed()); // 受伤闪红
+        
+        if (isDead) return;
+        
+        // 触发受击动画
+        animator.SetTrigger("Hit");
+        
+        // 扣血逻辑
         health -= damage;
         if (health <= 0)
         {
             Die();
         }
-        else
-        {
-            // 播放受伤动画
-            animator.SetTrigger("Hit");
-        }
     }
     //敌人死亡
     private void Die()
     {
-        // 触发死亡事件
-        OnDeath?.Invoke();
+        isDead = true;
         
-        // 播放死亡动画
+        // 1. 触发死亡动画
         animator.SetTrigger("Die");
         
-        // 销毁敌人
-        Destroy(gameObject, 1f);
+        // 2. 禁用碰撞器
+        GetComponent<Collider2D>().enabled = false;
+    }
+    
+    // 由动画事件调用的方法
+    public void DelayedDestroy()
+    {
+        OnDeath?.Invoke(); // 先触发事件
+        Destroy(gameObject); // 再销毁
+    }
+    
+    IEnumerator FlashRed()
+    {
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        Color original = sr.color;
+        sr.color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        sr.color = original;
     }
 
     // 在游戏开始前初始化组件
