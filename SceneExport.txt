@@ -1587,6 +1587,20 @@
 游戏对象: Items
 - 组件:
   - Transform
+子对象: 破旧的短剑
+  - 组件:
+    - Transform
+    - SpriteRenderer
+    - BoxCollider2D
+    - Rigidbody2D
+    - Pickable
+子对象: 灵气
+  - 组件:
+    - Transform
+    - SpriteRenderer
+    - BoxCollider2D
+    - Rigidbody2D
+    - Pickable
 
 游戏对象: Grid
 - 组件:

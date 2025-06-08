@@ -40,4 +40,5 @@ public class ItemData :ScriptableObject
     public bool isWeapon = false; // 是否是武器
     public int damage = 10; // 武器伤害
     public float attackSpeed = 1.0f; // 攻击速度
+    public int maxDurability = 100; // 必须为public
 }

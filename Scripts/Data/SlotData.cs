@@ -22,7 +22,8 @@ public class SlotData
     /// <summary>
     /// 当槽位数据发生变化时调用的委托
     /// </summary>
-    private Action OnChange;
+    // 修改OnChange为公共或通过方法访问
+    public Action OnChange { get; private set; }
 
     /// <summary>
     /// 将另一个槽位的数据移动到当前槽位
@@ -134,5 +135,11 @@ public class SlotData
             }
             OnChange?.Invoke();
         }
+    }
+    
+    // 公共方法触发事件
+    public void NotifyChange()
+    {
+        OnChange?.Invoke();
     }
 }

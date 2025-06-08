@@ -107,7 +107,7 @@ public class InventoryManager : MonoBehaviour
         Debug.LogWarning("无法放入仓库，你的背包" + backpack + "已满。");
     }
     
-    /*private void OnApplicationQuit()
+    private void OnApplicationQuit()
     {
         ResetWeaponDurability();
     }
@@ -123,27 +123,26 @@ public class InventoryManager : MonoBehaviour
         }
     }
 #endif
-
+    //每次测试完毕后重置武器耐久度
     private void ResetWeaponDurability()
     {
         foreach (SlotData slot in backpack.slotList)
         {
             if (slot?.item?.isWeapon == true)
             {
-                slot.currentDurability = slot.item.maxDurability;
-                slot.OnChange?.Invoke();
+                slot.durability = slot.item.maxDurability;
+                slot.NotifyChange(); // 或 TriggerChange() 根据方案选择
             }
         }
-        
+    
         foreach (SlotData slot in toolbarData.slotList)
         {
             if (slot?.item?.isWeapon == true)
             {
-                slot.currentDurability = slot.item.maxDurability;
-                slot.OnChange?.Invoke();
+                slot.durability = slot.item.maxDurability;
+                slot.NotifyChange();
             }
         }
-        
         Debug.Log("武器耐久度已重置");
-    }*/
+    }
 }
