@@ -15,7 +15,12 @@ MonoBehaviour:
   type: 10
   sprite: {fileID: -1220666167, guid: 41c42e4a548a7ac42b58e780b82ab09b, type: 3}
   prefab: {fileID: 1450146083388600258, guid: ef67471bcf434f34898b8c0745de9c8e, type: 3}
-  maxCount: 99
+  maxCount: 999
   isWeapon: 0
   damage: 10
   attackSpeed: 1
+  maxDurability: 100
+  isTool: 0
+  toolType: 10
+  toolEfficiency: 1
+  toolDurability: 100

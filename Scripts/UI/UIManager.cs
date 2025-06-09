@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    public static UIManager Instance;
+    public static UIManager Instance { get; private set; }
     public Image hpMaskImage;
     public Image mpMaskImage;
     private float originalSize; // 血条原始宽度
@@ -24,9 +24,17 @@ public class UIManager : MonoBehaviour
 
     void Awake()
     {
-        Instance = this;
         originalSize = hpMaskImage.rectTransform.rect.width;
         SetHPValue(1);
+        
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     /// <summary>
@@ -107,6 +115,19 @@ public class UIManager : MonoBehaviour
             //允许NPC活动
             GameManager.Instance.canWalkingNPC = true;
         }
+    }
+    
+    public bool IsAnyPanelOpen()
+    {
+        // 检查所有可能的面板是否开启
+        return TalkPanelGo0.activeSelf || 
+               TalkPanelGo1.activeSelf ||
+               TalkPanelGo2.activeSelf ||
+               TalkPanelGo3.activeSelf ||
+               TalkPanelGo4.activeSelf ||
+               TalkPanelGo5.activeSelf ||
+               TalkPanelGo6.activeSelf ||
+               (BackpackUI.Instance != null && BackpackUI.Instance.parentUI.activeSelf);
     }
 
     /// <summary>

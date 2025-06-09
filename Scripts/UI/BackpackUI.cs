@@ -10,12 +10,14 @@ public class BackpackUI : MonoBehaviour
     /// <summary>
     /// 背包界面的父级UI对象
     /// </summary>
-    private GameObject parentUI;
+    public GameObject parentUI;
 
     /// <summary>
     /// 存储所有槽位UI组件的列表
     /// </summary>
     public List<SlotUI> slotuiList;
+    
+    public static BackpackUI Instance { get; private set; }
 
     /// <summary>
     /// 在Awake阶段初始化背包UI管理器
@@ -24,6 +26,15 @@ public class BackpackUI : MonoBehaviour
     {
         // 查找并缓存当前GameObject下的ParentUI对象
         parentUI = transform.Find("ParentUI").gameObject;
+        
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     /// <summary>

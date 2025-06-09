@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 
@@ -36,6 +37,11 @@ public class Player : MonoBehaviour
     public Transform attackPoint; // 攻击效果生成点
     // 击中声音
     public AudioClip hitSound;
+    
+    [Header("Interaction Settings")]
+    public float interactRange = 2.5f; // 交互距离
+    public LayerMask interactableLayer;
+    public GameObject toolEffectPrefab; // 工具使用特效
 
     // 在游戏开始前初始化组件
     private void Start()
@@ -109,7 +115,23 @@ public class Player : MonoBehaviour
         
         // 添加攻击检测
         CheckAttack();
+        
+        // 工具交互输入
+        if(Input.GetMouseButtonDown(0) && !IsInMenu()) // 左键点击且不在菜单中
+        {
+            TryInteractWithBlock();
+        }
     }
+    
+    private bool IsInMenu()
+    {
+        // 更安全的检查方式
+        bool isBackpackOpen = (BackpackUI.Instance != null) && BackpackUI.Instance.parentUI.activeSelf;
+        bool isAnyPanelOpen = (UIManager.Instance != null) && UIManager.Instance.IsAnyPanelOpen();
+    
+        return isBackpackOpen || isAnyPanelOpen;
+    }
+    
     //攻击
     private void CheckAttack()
     {
@@ -211,6 +233,58 @@ public class Player : MonoBehaviour
         {
             Gizmos.color = Color.magenta;
             Gizmos.DrawWireSphere(attackPoint.position, 0.2f);
+        }
+        //检验工具类型道具的使用范围
+        Gizmos.color = Color.blue;
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 direction = (mousePos - (Vector2)transform.position).normalized;
+        Gizmos.DrawRay(transform.position, direction * interactRange);
+    }
+    
+    private void TryInteractWithBlock()
+    {
+        // 获取当前选中的工具物品
+        ToolbarSlotUI selectedSlot = toolbarUI.GetSelectedSlotUI();
+        if(selectedSlot == null || selectedSlot.GetData() == null || 
+           !selectedSlot.GetData().item.isTool)
+        {
+            return; // 没有选中有效工具
+        }
+        
+        // 从玩家位置向鼠标指向方向发射射线
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 direction = (mousePos - (Vector2)transform.position).normalized;
+        
+        RaycastHit2D hit = Physics2D.Raycast(
+            transform.position, 
+            direction, 
+            interactRange, 
+            interactableLayer
+        );
+        
+        Debug.DrawRay(transform.position, direction * interactRange, Color.red, 1f);
+        
+        if(hit.collider != null)
+        {
+            InteractableBlock block = hit.collider.GetComponent<InteractableBlock>();
+            if(block != null)
+            {
+                // 播放工具使用效果
+                if(toolEffectPrefab)
+                {
+                    Instantiate(toolEffectPrefab, hit.point, Quaternion.identity);
+                }
+                
+                // 触发交互
+                block.Interact(selectedSlot.GetData().item);
+                
+                // 消耗工具耐久度
+                if(selectedSlot.GetData().item.isTool)
+                {
+                    selectedSlot.GetData().ReduceDurability(1);
+                    toolbarUI.UpdateUI(); // 更新工具栏显示
+                }
+            }
         }
     }
 

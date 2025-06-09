@@ -16,7 +16,19 @@ public enum ItemType
     Coins,
     Potion,
     Candle,
+    //材料
+    木头,
+    石头,
+    铁矿,
+    //武器
     破旧的短剑,
+    普通的剑,
+    绿宝石剑,
+    蓝宝石剑,
+    红宝石剑,
+    //工具
+    破旧的镐子,
+    破旧的斧头,
 }
 
 // 创建一个ItemData类，继承自ScriptableObject，用于在Unity编辑器中创建物品数据资产
@@ -41,4 +53,11 @@ public class ItemData :ScriptableObject
     public int damage = 10; // 武器伤害
     public float attackSpeed = 1.0f; // 攻击速度
     public int maxDurability = 100; // 必须为public
+    
+    //工具属性
+    [Header("Tool Properties")]
+    public bool isTool = false;
+    public ItemType toolType; // 工具类型(Axe, Pickaxe等)
+    public float toolEfficiency = 1f; // 工具效率
+    public float toolDurability = 100f; // 工具耐久度
 }
