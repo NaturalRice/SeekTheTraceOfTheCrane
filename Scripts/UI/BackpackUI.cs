@@ -44,6 +44,7 @@ public class BackpackUI : MonoBehaviour
     {
         // 初始化UI
         InitUI();
+        parentUI.SetActive(false); // 确保初始关闭
     }
 
     /// <summary>

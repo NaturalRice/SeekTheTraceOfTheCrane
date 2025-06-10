@@ -28,6 +28,9 @@ public class InventoryManager : MonoBehaviour
     /// </summary>
     [HideInInspector]
     public InventoryData toolbarData;
+    
+    // 可以缓存常用物品的数量
+    private Dictionary<ItemType, int> itemCountCache = new Dictionary<ItemType, int>();
 
     /// <summary>
     /// 在对象初始化时调用，设置 InventoryManager 的单例实例并初始化数据。
@@ -60,7 +63,7 @@ public class InventoryManager : MonoBehaviour
     /// </summary>
     /// <param name="type">物品类型。</param>
     /// <returns>物品数据，如果找不到则返回 null。</returns>
-    private ItemData GetItemData(ItemType type)
+    public ItemData GetItemData(ItemType type)
     {
         ItemData data;
         bool isSuccess = itemDataDict.TryGetValue(type, out data);
@@ -79,7 +82,7 @@ public class InventoryManager : MonoBehaviour
     /// 将物品添加到背包中。
     /// </summary>
     /// <param name="type">要添加的物品类型。</param>
-    public void AddToBackpack(ItemType type)
+    public void AddToBackpack(ItemType type, int amount = 1)
     {
         ItemData item = GetItemData(type);
         if (item == null) return;
@@ -89,8 +92,11 @@ public class InventoryManager : MonoBehaviour
         {
             if (slotData.item == item && slotData.CanAddItem())
             {
-                slotData.Add();
-                return;
+                int addAmount = Mathf.Min(amount, slotData.GetFreeSpace());
+                slotData.Add(addAmount);
+                amount -= addAmount;
+            
+                if(amount <= 0) return;
             }
         }
 
@@ -99,12 +105,44 @@ public class InventoryManager : MonoBehaviour
         {
             if (slotData.count == 0)
             {
-                slotData.AddItem(item);
-                return;
+                slotData.AddItem(item, Mathf.Min(amount, item.maxCount));
+                amount -= Mathf.Min(amount, item.maxCount);
+            
+                if(amount <= 0) return;
             }
         }
+        // 在AddToBackpack中添加
+        Debug.Log($"Added {amount} of {type} to backpack");
 
         Debug.LogWarning("无法放入仓库，你的背包" + backpack + "已满。");
+        
+        itemCountCache.Clear(); // 清空缓存
+    }
+    
+    public int GetItemCount(ItemType type)
+    {
+        if(backpack == null || backpack.slotList == null)
+        {
+            Debug.LogError("Inventory not initialized!");
+            return 0;
+        }
+        
+        if(itemCountCache.ContainsKey(type))
+            return itemCountCache[type];
+        
+        int count = 0;
+        foreach(var slot in backpack.slotList)
+        {
+            if(slot.item != null && slot.item.type == type)
+            {
+                count += slot.count;
+            }
+        }
+        // 在GetItemCount中添加
+        Debug.Log($"Counted {count} of {type} in backpack");
+        
+        itemCountCache[type] = count;
+        return count;
     }
     
     private void OnApplicationQuit()

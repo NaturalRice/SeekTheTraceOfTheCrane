@@ -24,6 +24,9 @@ public class UIManager : MonoBehaviour
 
     void Awake()
     {
+        // 确保所有对话面板初始关闭
+        TalkPanelGo0.SetActive(false);
+        
         originalSize = hpMaskImage.rectTransform.rect.width;
         SetHPValue(1);
         

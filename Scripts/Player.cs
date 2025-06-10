@@ -121,6 +121,11 @@ public class Player : MonoBehaviour
         {
             TryInteractWithBlock();
         }
+        // 显示合成表
+        if(Input.GetKeyDown(KeyCode.C))
+        {
+            CraftingUI.Instance.ToggleCraftingUI();
+        }
     }
     
     private bool IsInMenu()
