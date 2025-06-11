@@ -27,11 +27,14 @@ public class CraftingRecipe : ScriptableObject
     
     public enum RecipeCategory
     {
+        Weapon,
         Equipment,
         Tools,
         Building,
-        Consumables,
-        Miscellaneous
+        Material,
+        Potion,
+        Hp,
+        Mp,
     }
     
     // 检查玩家是否有足够材料

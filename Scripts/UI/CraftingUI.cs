@@ -9,10 +9,12 @@ public class CraftingUI : MonoBehaviour
     
     [Header("UI Elements")]
     public GameObject craftingPanel;
-    public Transform categoryButtonsParent;
+    public Transform categoryButtonsParent; // 分类按钮的父对象
+    public Transform recipeButtonsParent;   // 配方按钮的父对象
     public Transform recipeListParent;
     public GameObject recipeButtonPrefab;
     public Button craftButton;
+    public Button closeButton;
     
     [Header("Recipe Details")]
     public Image recipeIcon;
@@ -22,7 +24,8 @@ public class CraftingUI : MonoBehaviour
     public GameObject materialSlotPrefab;
     
     private CraftingRecipe selectedRecipe;
-    private Dictionary<CraftingRecipe.RecipeCategory, Button> categoryButtons = new Dictionary<CraftingRecipe.RecipeCategory, Button>();
+    private Dictionary<CraftingRecipe.RecipeCategory, Button> categoryButtons = 
+        new Dictionary<CraftingRecipe.RecipeCategory, Button>();
     
     private void Awake()//确保单例模式正确初始化
     {
@@ -34,13 +37,37 @@ public class CraftingUI : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        
+        // 绑定基础按钮
+        craftButton.onClick.AddListener(OnCraftButtonClick);
+        closeButton.onClick.AddListener(ToggleCraftingUI);
+        
+        // 绑定动态生成的按钮
+        BindCategoryButtons();
     }
     
     private void Start()
     {
-        InitializeCategoryButtons();
-        craftingPanel.SetActive(false);// 确保初始关闭
+        // 改为直接绑定现有按钮
+        BindExistingCategoryButtons();
+        craftingPanel.SetActive(false);// 确保初始关闭(如果要通过SceneExporter来查找该面板信息时需注释此行代码！)
     }
+    
+    // 新方法：绑定场景中已有的分类按钮
+    private void BindExistingCategoryButtons()
+    {
+        CategoryButton[] categoryButtons = categoryButtonsParent.GetComponentsInChildren<CategoryButton>(true);
+    
+        foreach (var button in categoryButtons)
+        {
+            Button btnComponent = button.GetComponent<Button>();
+            btnComponent.onClick.RemoveAllListeners();
+            btnComponent.onClick.AddListener(() => {
+                ShowCategoryRecipes(button.category);
+            });
+        }
+    }
+    
     //配置分类按钮
     private void InitializeCategoryButtons()
     {
@@ -66,7 +93,8 @@ public class CraftingUI : MonoBehaviour
             categoryButtons[category] = button;
         }
     }
-    //动态生成配方列表
+    
+    //动态生成配方列表,绑定配方按钮
     public void ShowCategoryRecipes(CraftingRecipe.RecipeCategory category)
     {
         // 清除现有配方列表
@@ -74,19 +102,37 @@ public class CraftingUI : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-        
-        // 获取当前类别的配方
-        List<CraftingRecipe> recipes = CraftingManager.Instance.GetRecipesByCategory(category);
-        
-        // 创建配方按钮
-        foreach(var recipe in recipes)
+    
+        // 重置滚动位置（如果需要）
+        var scrollRect = recipeListParent.GetComponentInParent<ScrollRect>();
+        if(scrollRect != null && scrollRect.content != null) 
         {
-            GameObject recipeButton = Instantiate(recipeButtonPrefab, recipeListParent);
-            recipeButton.GetComponentInChildren<TextMeshProUGUI>().text = recipe.recipeName;
-            recipeButton.GetComponent<Image>().sprite = recipe.icon;
-            recipeButton.GetComponent<Button>().onClick.AddListener(() => SelectRecipe(recipe));
+            scrollRect.normalizedPosition = Vector2.zero;
         }
+        else
+        {
+            Debug.LogWarning("ScrollRect或Content未正确设置");
+        }
+    
+        // 生成新的配方按钮
+        var recipes = CraftingManager.Instance.GetRecipesByCategory(category);
+        foreach (var recipe in recipes)
+        {
+            GameObject buttonObj = Instantiate(recipeButtonPrefab, recipeListParent); // 注意改为recipeListParent
+            Button button = buttonObj.GetComponent<Button>();
+    
+            // 设置按钮显示
+            button.GetComponentInChildren<TextMeshProUGUI>().text = recipe.recipeName;
+            button.GetComponent<Image>().sprite = recipe.icon;
+    
+            // 绑定点击事件
+            button.onClick.AddListener(() => SelectRecipe(recipe));
+        }
+    
+        // 强制立即重新布局
+        LayoutRebuilder.ForceRebuildLayoutImmediate(recipeListParent.GetComponent<RectTransform>());
     }
+    
     //配置详情显示
     public void SelectRecipe(CraftingRecipe recipe)
     {
@@ -125,6 +171,7 @@ public class CraftingUI : MonoBehaviour
             }
         }
     }
+    
     //合成按钮逻辑
     public void OnCraftButtonClick()
     {
@@ -133,22 +180,16 @@ public class CraftingUI : MonoBehaviour
             bool success = CraftingManager.Instance.CraftItem(selectedRecipe);
             if(success)
             {
-                // 更新UI
-                SelectRecipe(selectedRecipe);
-                // 播放成功音效(如有)
-                //GameManager.Instance.PlaySound(GameManager.Instance.craftSuccessSound);
-            }
-            else
-            {
-                // 播放失败音效
-                //GameManager.Instance.PlaySound(GameManager.Instance.craftFailSound);
+                UpdateMaterialsDisplay(); // 刷新UI
+                //PlaySuccessEffect();
             }
         }
     }
+    
     //打开/关闭合成界面
     public void ToggleCraftingUI()
     {
-        bool active = !craftingPanel.activeSelf;
+        bool active = !craftingPanel.activeSelf;// 背景板无需单独引用，它会随父对象自动激活/禁用
         craftingPanel.SetActive(active);
         
         if(active)
@@ -160,6 +201,23 @@ public class CraftingUI : MonoBehaviour
         else
         {
             GameManager.Instance.canControlLuna = true;
+        }
+    }
+    
+    //绑定分类按钮
+    private void BindCategoryButtons()
+    {
+        // 获取所有分类按钮
+        Button[] categoryButtons = categoryButtonsParent.GetComponentsInChildren<Button>();
+    
+        foreach (var button in categoryButtons)
+        {
+            // 从按钮名称获取类别（或使用自定义组件）
+            string categoryName = button.name.Replace("Button", "");
+            if (System.Enum.TryParse(categoryName, out CraftingRecipe.RecipeCategory category))
+            {
+                button.onClick.AddListener(() => ShowCategoryRecipes(category));
+            }
         }
     }
 }

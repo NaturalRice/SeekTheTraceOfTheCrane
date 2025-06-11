@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b79ad7847f35d2f4d9488d1fa0cf64ee, type: 3}
+  m_Name: Recipe_IronSword1
+  m_EditorClassIdentifier: 
+  recipeName: "\u7834\u65E7\u7684\u77ED\u5251"
+  description: "\u5C31\u662F\u4F60\u4E00\u5F00\u59CB\u62FF\u6765\u780D\u602A\u7269\u90A3\u73A9\u610F\u513F..."
+  icon: {fileID: -1104203014, guid: e29d8405037896844aa63f007ffd9c32, type: 3}
+  requiredMaterials:
+  - itemType: 12
+    amount: 1
+  - itemType: 14
+    amount: 2
+  outputItem: {fileID: 11400000, guid: 8e7c1423c14179741bd8ffc29122c060, type: 2}
+  outputAmount: 1
+  category: 0

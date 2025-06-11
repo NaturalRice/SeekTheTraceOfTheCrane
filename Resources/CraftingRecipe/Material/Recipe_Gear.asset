@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b79ad7847f35d2f4d9488d1fa0cf64ee, type: 3}
+  m_Name: Recipe_Gear
+  m_EditorClassIdentifier: 
+  recipeName: "\u9F7F\u8F6E"
+  description: "\u597D\u50CF\u53EF\u4EE5\u88C5\u5230\u7075\u673A\u8EAB\u4E0A\u8BD5\u8BD5"
+  icon: {fileID: 684143701, guid: 99cf28d4c57d174429f766575c7b02d6, type: 3}
+  requiredMaterials:
+  - itemType: 14
+    amount: 3
+  outputItem: {fileID: 11400000, guid: 45883670a162faf4499944e47ca1b794, type: 2}
+  outputAmount: 1
+  category: 4

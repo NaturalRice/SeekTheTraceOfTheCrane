@@ -170,7 +170,7 @@ public class EnemyController : MonoBehaviour
             UpdateHealthColor(fillPercent);
         }
         
-        Debug.Log($"Updating Enemy Health: {health}/{healthBarWidth}");//调试时使用
+        //Debug.Log($"Updating Enemy Health: {health}/{healthBarWidth}");//调试时使用
     }
     
     // 复制玩家的颜色变化逻辑
