@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -7,25 +8,28 @@ public class CraftingUI : MonoBehaviour
 {
     public static CraftingUI Instance { get; private set; }
     
-    [Header("UI Elements")]
+    // 保留对持久化对象的引用
+    [Header("持久化引用")]
     public GameObject craftingPanel;
-    public Transform categoryButtonsParent; // 分类按钮的父对象
-    public Transform recipeButtonsParent;   // 配方按钮的父对象
-    public Transform recipeListParent;
+    public Transform categoryButtonsParent;
+    public Transform recipeButtonsParent; // Content对象
     public GameObject recipeButtonPrefab;
     public Button craftButton;
     public Button closeButton;
     
-    [Header("Recipe Details")]
+    [Header("详情区域引用")]
     public Image recipeIcon;
     public TextMeshProUGUI recipeNameText;
     public TextMeshProUGUI recipeDescriptionText;
     public Transform materialsContainer;
     public GameObject materialSlotPrefab;
-    
+    // 不再保存动态生成的按钮引用
     private CraftingRecipe selectedRecipe;
     private Dictionary<CraftingRecipe.RecipeCategory, Button> categoryButtons = 
         new Dictionary<CraftingRecipe.RecipeCategory, Button>();
+    
+    // 添加初始化标志
+    private bool isInitialized = false;
     
     private void Awake()//确保单例模式正确初始化
     {
@@ -38,7 +42,7 @@ public class CraftingUI : MonoBehaviour
             Destroy(gameObject);
         }
         
-        // 绑定基础按钮
+        // 改为延迟初始化
         craftButton.onClick.AddListener(OnCraftButtonClick);
         closeButton.onClick.AddListener(ToggleCraftingUI);
         
@@ -94,43 +98,59 @@ public class CraftingUI : MonoBehaviour
         }
     }
     
+    private void InitializeIfNeeded()
+    {
+        if(isInitialized) return;
+        
+        // 确保所有必要引用有效
+        if(recipeButtonsParent == null || materialsContainer == null)
+        {
+            Debug.LogError("关键UI引用丢失！");
+            return;
+        }
+        
+        // 绑定分类按钮
+        BindExistingCategoryButtons();
+        isInitialized = true;
+    }
+    
     //动态生成配方列表,绑定配方按钮
     public void ShowCategoryRecipes(CraftingRecipe.RecipeCategory category)
     {
-        // 清除现有配方列表
-        foreach(Transform child in recipeListParent)
+        if(!ValidateReferences()) return;
+        
+        // 安全检查
+        if(recipeButtonsParent == null)
         {
-            Destroy(child.gameObject);
+            Debug.LogError("recipeButtonsParent未设置！");
+            return;
         }
-    
-        // 重置滚动位置（如果需要）
-        var scrollRect = recipeListParent.GetComponentInParent<ScrollRect>();
-        if(scrollRect != null && scrollRect.content != null) 
+
+        // 清除现有配方按钮（使用安全方式）
+        for(int i = recipeButtonsParent.childCount - 1; i >= 0; i--)
         {
-            scrollRect.normalizedPosition = Vector2.zero;
+            Destroy(recipeButtonsParent.GetChild(i).gameObject);
         }
-        else
-        {
-            Debug.LogWarning("ScrollRect或Content未正确设置");
-        }
-    
-        // 生成新的配方按钮
+
+        // 生成新按钮
         var recipes = CraftingManager.Instance.GetRecipesByCategory(category);
         foreach (var recipe in recipes)
         {
-            GameObject buttonObj = Instantiate(recipeButtonPrefab, recipeListParent); // 注意改为recipeListParent
-            Button button = buttonObj.GetComponent<Button>();
-    
-            // 设置按钮显示
-            button.GetComponentInChildren<TextMeshProUGUI>().text = recipe.recipeName;
-            button.GetComponent<Image>().sprite = recipe.icon;
-    
-            // 绑定点击事件
-            button.onClick.AddListener(() => SelectRecipe(recipe));
+            var buttonObj = Instantiate(recipeButtonPrefab, recipeButtonsParent);
+            var button = buttonObj.GetComponent<Button>();
+        
+            // 安全设置按钮属性
+            var text = buttonObj.GetComponentInChildren<TextMeshProUGUI>();
+            if(text != null) text.text = recipe.recipeName;
+        
+            var image = buttonObj.GetComponent<Image>();
+            if(image != null && recipe.icon != null) image.sprite = recipe.icon;
+        
+            button.onClick.AddListener(() => 
+            {
+                if(recipe != null) SelectRecipe(recipe);
+            });
         }
-    
-        // 强制立即重新布局
-        LayoutRebuilder.ForceRebuildLayoutImmediate(recipeListParent.GetComponent<RectTransform>());
     }
     
     //配置详情显示
@@ -148,23 +168,34 @@ public class CraftingUI : MonoBehaviour
         
         // 更新合成按钮状态
         craftButton.interactable = recipe.CanCraft(InventoryManager.Instance.backpack);
+        
+        // 方法实现
+        Debug.Log("Selected recipe: " + recipe.recipeName);
     }
     
     private void UpdateMaterialsDisplay()
     {
-        // 清除现有材料显示
-        foreach(Transform child in materialsContainer)
+        // 安全清除
+        if(materialsContainer == null) return;
+    
+        for(int i = materialsContainer.childCount - 1; i >= 0; i--)
         {
-            Destroy(child.gameObject);
+            var child = materialsContainer.GetChild(i);
+            if(child != null) Destroy(child.gameObject);
         }
-        
-        // 添加新材料显示
+
+        // 安全生成新材料显示
+        if(selectedRecipe == null) return;
+    
         foreach(var material in selectedRecipe.requiredMaterials)
         {
-            GameObject materialSlot = Instantiate(materialSlotPrefab, materialsContainer);
-            MaterialSlotUI slotUI = materialSlot.GetComponent<MaterialSlotUI>();
-            
-            ItemData itemData = InventoryManager.Instance.GetItemData(material.itemType);
+            if(materialSlotPrefab == null) continue;
+        
+            var slot = Instantiate(materialSlotPrefab, materialsContainer);
+            var slotUI = slot.GetComponent<MaterialSlotUI>();
+            if(slotUI == null) continue;
+        
+            var itemData = InventoryManager.Instance.GetItemData(material.itemType);
             if(itemData != null)
             {
                 slotUI.SetMaterial(itemData, material.amount);
@@ -175,14 +206,27 @@ public class CraftingUI : MonoBehaviour
     //合成按钮逻辑
     public void OnCraftButtonClick()
     {
-        if(selectedRecipe != null)
+        Debug.Log("合成按钮被点击"); // 确认按钮响应
+    
+        if(selectedRecipe == null)
         {
-            bool success = CraftingManager.Instance.CraftItem(selectedRecipe);
-            if(success)
-            {
-                UpdateMaterialsDisplay(); // 刷新UI
-                //PlaySuccessEffect();
-            }
+            Debug.LogWarning("没有选中的配方");
+            return;
+        }
+
+        Debug.Log($"尝试合成: {selectedRecipe.recipeName}");
+        Debug.Log($"需要材料: {string.Join(",", selectedRecipe.requiredMaterials.Select(m => $"{m.itemType}x{m.amount}"))}");
+
+        bool success = CraftingManager.Instance.CraftItem(selectedRecipe);
+    
+        if(success)
+        {
+            Debug.Log("合成成功！");
+            UpdateMaterialsDisplay();
+        }
+        else
+        {
+            Debug.Log("合成失败，请检查材料是否足够");
         }
     }
     
@@ -195,6 +239,7 @@ public class CraftingUI : MonoBehaviour
         if(active)
         {
             // 初始化UI
+            InitializeIfNeeded();
             ShowCategoryRecipes(CraftingRecipe.RecipeCategory.Equipment);
             GameManager.Instance.canControlLuna = false;
         }
@@ -219,5 +264,30 @@ public class CraftingUI : MonoBehaviour
                 button.onClick.AddListener(() => ShowCategoryRecipes(category));
             }
         }
+    }
+    //错误预防机制，添加安全校验方法：
+    private bool ValidateReferences()
+    {
+        bool isValid = true;
+    
+        if(recipeButtonsParent == null)
+        {
+            Debug.LogError("recipeButtonsParent未分配！");
+            isValid = false;
+        }
+    
+        if(materialsContainer == null)
+        {
+            Debug.LogError("materialsContainer未分配！");
+            isValid = false;
+        }
+    
+        if(recipeButtonPrefab == null)
+        {
+            Debug.LogError("配方按钮预制件未分配！");
+            isValid = false;
+        }
+    
+        return isValid;
     }
 }
