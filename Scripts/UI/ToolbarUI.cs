@@ -16,6 +16,8 @@ public class ToolbarUI : MonoBehaviour
     /// 当前选中的工具栏槽位 UI
     /// </summary>
     private ToolbarSlotUI selectedSlotUI;
+    
+    public static ToolbarUI Instance { get; private set; }
 
     /// <summary>
     /// 在第一次帧更新之前调用
@@ -24,6 +26,18 @@ public class ToolbarUI : MonoBehaviour
     {
         // 初始化工具栏 UI
         InitUI();
+    }
+    
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     /// <summary>

@@ -140,21 +140,21 @@ public class Player : MonoBehaviour
     //攻击
     private void CheckAttack()
     {
-        // 检查当前选中的工具栏物品是否为破旧的短剑
-        ToolbarSlotUI selectedSlot = toolbarUI.GetSelectedSlotUI();
-        if (selectedSlot != null && selectedSlot.GetData() != null && 
-            selectedSlot.GetData().item != null && 
-            selectedSlot.GetData().item.type == ItemType.破旧的短剑)
+        // 获取当前选中的物品
+        SlotData currentSlot = toolbarUI.GetSelectedSlotUI()?.GetData();
+    
+        // 检查是否是武器
+        if(currentSlot != null && 
+           currentSlot.item != null && 
+           currentSlot.item.isWeapon && 
+           Input.GetMouseButton(0) && 
+           Time.time >= lastAttackTime + currentSlot.item.attackSpeed)
         {
-            // 按住鼠标左键且不在冷却期
-            if (Input.GetMouseButton(0) && Time.time >= lastAttackTime + attackCooldown)
-            {
-                Attack();
-            }
+            Attack(currentSlot.item);
         }
     }
 
-    private void Attack()
+    private void Attack(ItemData weapon)
     {
         lastAttackTime = Time.time;
         isAttacking = true;
@@ -174,29 +174,12 @@ public class Player : MonoBehaviour
         }
         
         // 3. 播放攻击音效
+        // 伤害检测
+        DetectHit(weapon);
+        
         if (hitSound)
         {
             GameManager.Instance.PlaySound(hitSound);
-        }
-        
-        // 4. 检测敌人,使用正确的2D物理检测方法
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayerMask);
-        Debug.Log($"检测到{hitEnemies.Length}个敌人");
-    
-        foreach (Collider2D enemy in hitEnemies)
-        {
-            Debug.Log($"击中: {enemy.name}", enemy.gameObject);
-        }
-        
-        // 5. 对敌人造成伤害
-        foreach (Collider2D enemy in hitEnemies)
-        {
-            EnemyController enemyCtrl = enemy.GetComponent<EnemyController>();
-            if (enemyCtrl != null)
-            {
-                enemyCtrl.TakeDamage(10);
-                Debug.Log($"对 {enemy.name} 造成伤害", enemy.gameObject);
-            }
         }
         
         // 重置攻击状态
@@ -210,6 +193,40 @@ public class Player : MonoBehaviour
             weaponSlot.ReduceDurability(1);
         }
     }
+    
+    // 独立的伤害检测方法
+    private void DetectHit(ItemData weapon)
+    {
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(
+            attackPoint.position, 
+            attackRange, 
+            enemyLayerMask);
+
+        foreach(Collider2D enemy in hitEnemies)
+        {
+            EnemyController enemyCtrl = enemy.GetComponent<EnemyController>();
+            if(enemyCtrl != null)
+            {
+                int finalDamage = CalculateDamage(weapon);
+                enemyCtrl.TakeDamage(finalDamage);
+                Debug.Log($"使用 {weapon.name} 造成 {finalDamage} 点伤害");
+            }
+        }
+    }
+    
+    private int CalculateDamage(ItemData weapon)
+    {
+        // 基础伤害计算
+        int baseDamage = weapon.damage;
+    
+        // 这里可以添加其他伤害修正因素，比如：
+        // - 玩家等级/属性加成
+        // - 暴击几率
+        // - 武器耐久度影响等
+    
+        return baseDamage;
+    }
+    
     //重置攻击状态
     private IEnumerator ResetAttackState()
     {
