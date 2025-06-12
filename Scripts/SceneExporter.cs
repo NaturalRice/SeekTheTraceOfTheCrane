@@ -1,4 +1,3 @@
-/*
 using System.IO;
 using UnityEngine;
 
@@ -147,9 +146,9 @@ public class SceneExporter : MonoBehaviour
     }
     
 }
-*/
 
-using System.Collections;
+//这里是针对CraftingPanel中所有组件情况的
+/*using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
@@ -324,4 +323,4 @@ public class SceneExporter : MonoBehaviour
             ExportObjectInfo(child.gameObject, writer, depth + 1);
         }
     }
-}
+}*/
