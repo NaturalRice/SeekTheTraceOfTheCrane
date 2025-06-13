@@ -20,14 +20,15 @@ public class VideoPlayerController : MonoBehaviour
     private bool isVideoPrepared = false;
     private bool isVideoPlaying = false;
     private bool hasFinished = false;
+    private bool canSkipVideo = false; // 新增：控制是否可以跳过
 
     private void Start()
     {
         startScreenCanvas.SetActive(true);
         videoCanvas.SetActive(false);
         hasFinished = false;
+        canSkipVideo = false; // 初始不可跳过
 
-        // 确保背景音乐一开始是停止状态
         if(backgroundMusic != null)
         {
             backgroundMusic.Stop();
@@ -62,6 +63,23 @@ public class VideoPlayerController : MonoBehaviour
         {
             StartVideoPlayback();
         }
+        
+        // 仅在视频播放期间允许跳过
+        if (canSkipVideo && Input.GetKeyDown(KeyCode.Space))
+        {
+            SkipVideo();
+        }
+    }
+
+    // 新增专用跳过方法
+    private void SkipVideo()
+    {
+        if (!canSkipVideo) return;
+        
+        Debug.Log("跳过视频");
+        videoPlayer.Stop();
+        canSkipVideo = false; // 立即禁用跳过
+        OnVideoFinished(videoPlayer);
     }
 
     private void StartVideoPlayback()
@@ -78,12 +96,14 @@ public class VideoPlayerController : MonoBehaviour
         isVideoPrepared = true;
         videoPlayer.Play();
         isVideoPlaying = true;
+        canSkipVideo = true; // 视频开始播放后允许跳过
     }
 
     private void OnVideoFinished(VideoPlayer source)
     {
         Debug.Log("视频播放完毕！");
         hasFinished = true;
+        canSkipVideo = false; // 确保跳过功能关闭
         videoCanvas.SetActive(false);
         
         // 视频结束后开始播放背景音乐
