@@ -3,30 +3,56 @@ using UnityEngine.Video;
 
 public class StartScreen : MonoBehaviour
 {
-    [SerializeField] private GameObject startScreenCanvas; // 引用开始界面的Canvas
-    [SerializeField] private GameObject videoCanvas; // 引用视频播放界面的Canvas
-    [SerializeField] private VideoPlayer videoPlayer; // 引用VideoPlayer组件
+    [SerializeField] private GameObject startScreenCanvas;
+    [SerializeField] private GameObject videoCanvas;
+    [SerializeField] private VideoPlayer videoPlayer;
+    
+    private bool hasSwitched = false;
 
     private void Start()
     {
-        // 确保开始界面在游戏开始时显示
         startScreenCanvas.SetActive(true);
         videoCanvas.SetActive(false);
+        
+        // 添加事件监听
+        if(videoPlayer != null)
+        {
+            videoPlayer.prepareCompleted += OnVideoPrepared;
+            videoPlayer.loopPointReached += OnVideoFinished;
+        }
     }
 
     private void Update()
     {
-        // 检测玩家是否按下任意键
-        if (Input.anyKeyDown)
+        if (!hasSwitched && Input.anyKeyDown)
         {
-            // 隐藏开始界面
+            hasSwitched = true;
             startScreenCanvas.SetActive(false);
-            // 显示视频播放界面
             videoCanvas.SetActive(true);
-
-            // 准备并播放视频
             videoPlayer.Prepare();
-            videoPlayer.Play();
+        }
+    }
+
+    // 新增视频准备完成回调
+    private void OnVideoPrepared(VideoPlayer source)
+    {
+        videoPlayer.Play();
+    }
+
+    // 新增视频播放完成回调
+    private void OnVideoFinished(VideoPlayer source)
+    {
+        // 这里可以添加视频播放完成后的逻辑
+        Debug.Log("视频播放完成");
+    }
+
+    private void OnDestroy()
+    {
+        // 清理视频播放器事件
+        if(videoPlayer != null)
+        {
+            videoPlayer.prepareCompleted -= OnVideoPrepared;
+            videoPlayer.loopPointReached -= OnVideoFinished;
         }
     }
 }

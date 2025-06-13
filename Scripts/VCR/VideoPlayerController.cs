@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.Video;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement; // 添加场景管理命名空间
+using UnityEngine.SceneManagement;
+using System.Collections; // 添加这行
 
 public class VideoPlayerController : MonoBehaviour
 {
@@ -9,18 +10,28 @@ public class VideoPlayerController : MonoBehaviour
     [SerializeField] private GameObject videoCanvas;
     [SerializeField] private VideoPlayer videoPlayer;
     [SerializeField] private RawImage rawImage;
-    [SerializeField] private string mainSceneName = "MainScene"; // 主场景名称
+    [SerializeField] private string mainSceneName = "SampleScene";
+    
+    // 新增音频控制变量
+    [SerializeField] private AudioSource backgroundMusic;
+    [SerializeField] private AudioClip mainSceneMusic;
+    [SerializeField] private float musicFadeInDuration = 1.0f; // 音乐淡入时间
 
     private bool isVideoPrepared = false;
     private bool isVideoPlaying = false;
-    private bool hasFinished = false; // 新增：标记流程是否已完成
+    private bool hasFinished = false;
 
     private void Start()
     {
-        // 确保只显示开始界面
         startScreenCanvas.SetActive(true);
         videoCanvas.SetActive(false);
         hasFinished = false;
+
+        // 确保背景音乐一开始是停止状态
+        if(backgroundMusic != null)
+        {
+            backgroundMusic.Stop();
+        }
 
         if (videoPlayer == null)
         {
@@ -28,11 +39,9 @@ public class VideoPlayerController : MonoBehaviour
             return;
         }
 
-        // 设置视频播放器
         videoPlayer.playOnAwake = false;
         videoPlayer.isLooping = false;
 
-        // 添加事件监听
         videoPlayer.prepareCompleted += OnVideoPrepared;
         videoPlayer.loopPointReached += OnVideoFinished;
         videoPlayer.errorReceived += OnVideoError;
@@ -49,7 +58,6 @@ public class VideoPlayerController : MonoBehaviour
 
     private void Update()
     {
-        // 仅在未开始流程且未完成时检测按键
         if (!hasFinished && !isVideoPrepared && !isVideoPlaying && Input.anyKeyDown)
         {
             StartVideoPlayback();
@@ -75,15 +83,45 @@ public class VideoPlayerController : MonoBehaviour
     private void OnVideoFinished(VideoPlayer source)
     {
         Debug.Log("视频播放完毕！");
-        hasFinished = true; // 标记流程已完成
+        hasFinished = true;
         videoCanvas.SetActive(false);
+        
+        // 视频结束后开始播放背景音乐
+        if(backgroundMusic != null)
+        {
+            if(mainSceneMusic != null)
+            {
+                backgroundMusic.clip = mainSceneMusic;
+            }
+            
+            // 使用淡入效果
+            StartCoroutine(FadeInMusic());
+        }
+        
         EnterGame();
+    }
+    
+    // 音乐淡入效果
+    private IEnumerator FadeInMusic()
+    {
+        backgroundMusic.volume = 0f;
+        backgroundMusic.Play();
+    
+        float timer = 0f;
+        while(timer < musicFadeInDuration)
+        {
+            timer += Time.deltaTime;
+            backgroundMusic.volume = Mathf.Lerp(0f, 1f, timer / musicFadeInDuration);
+            yield return null; // 确保有 yield 语句
+        }
+    
+        backgroundMusic.volume = 1f;
     }
 
     private void OnVideoError(VideoPlayer source, string message)
     {
         Debug.LogError($"视频播放错误: {message}");
-        hasFinished = true; // 即使出错也标记为已完成
+        hasFinished = true;
         videoCanvas.SetActive(false);
         EnterGame();
     }
@@ -91,23 +129,21 @@ public class VideoPlayerController : MonoBehaviour
     private void EnterGame()
     {
         Debug.Log("视频播放完毕，进入游戏！");
-        
-        // 加载主场景
-        if (!string.IsNullOrEmpty(mainSceneName))
+    
+        // 确保GameManager已初始化
+        if(GameManager.Instance == null)
         {
-            SceneManager.LoadScene(mainSceneName);
+            Instantiate(Resources.Load<GameObject>("GameManagerPrefab"));
         }
-        
-        // 禁用此脚本防止重复执行
-        enabled = false;
-        
-        // 可选：销毁这个控制器对象
-        Destroy(gameObject);
+    
+        // 加载场景前确保怪物系统就绪
+        GameManager.Instance.TrySpawnMonsters();
+    
+        SceneManager.LoadScene(mainSceneName);
     }
 
     private void OnDestroy()
     {
-        // 清理事件监听
         if (videoPlayer != null)
         {
             videoPlayer.prepareCompleted -= OnVideoPrepared;

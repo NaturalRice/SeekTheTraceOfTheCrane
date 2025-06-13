@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 /// <summary>
 /// 游戏总管理
 /// </summary>
@@ -37,6 +38,17 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        if(Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject); // 保持跨场景不销毁
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+        
         Instance = this;
         lunaCurrentHP = 100;
         lunaCurrentMP = 100;
@@ -170,19 +182,35 @@ public class GameManager : MonoBehaviour
     
     public void TrySpawnMonsters()
     {
-        // 如果已生成的怪物数量达到最大值，不再生成
+        // 确保玩家存在
+        if(playerTransform == null) 
+        {
+            playerTransform = FindObjectOfType<Player>()?.transform;
+            if(playerTransform == null) return;
+        }
+
+        // 清理已销毁的怪物引用
+        spawnedMonsters.RemoveAll(monster => monster == null);
+        
         if (spawnedMonsters.Count >= maxMonsters)
         {
             return;
         }
 
-        // 随机生成怪物的位置
         Vector2 randomPosition2D = Random.insideUnitCircle.normalized * spawnRadius;
         Vector3 randomPosition = new Vector3(randomPosition2D.x, randomPosition2D.y, 0);
         GameObject monster = Instantiate(monsterPrefab, playerTransform.position + randomPosition, Quaternion.identity);
+        
+        // 设置父对象保持组织性
+        if(monstersGo == null)
+        {
+            monstersGo = new GameObject("MonstersContainer");
+            DontDestroyOnLoad(monstersGo);
+        }
+        monster.transform.SetParent(monstersGo.transform);
+        
         spawnedMonsters.Add(monster);
 
-        // 设置怪物的死亡回调，以便从列表中移除
         monster.GetComponent<EnemyController>().OnDeath += () =>
         {
             spawnedMonsters.Remove(monster);
