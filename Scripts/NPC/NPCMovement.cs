@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NPCMovement : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 10.0f; // NPC移动速度
+    [SerializeField] private float moveSpeed = 5.0f; // NPC移动速度
     [SerializeField] private float followDistance = 5.0f; // 跟随距离阈值
     [SerializeField] private float followSpeed = 3.0f; // 跟随时的速度
     [SerializeField] private float stopDistance = 1.0f; // 停止距离阈值
@@ -14,6 +14,9 @@ public class NPCMovement : MonoBehaviour
     private Rigidbody2D rigidbody2d; // 刚体组件引用，用于移动
     private Animator animator; // 动画控制器组件引用，用于播放动画
     private Transform playerTransform; // 玩家的位置
+    
+    [SerializeField] private VideoPlayerController videoPlayerController; // 视频播放控制器
+    private bool hasPlayedVideo = false; // 是否已经播放过视频
 
     private void Start()
     {
@@ -26,6 +29,17 @@ public class NPCMovement : MonoBehaviour
     {
         // 计算NPC和玩家之间的距离
         float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
+        
+        // 播放视频
+        if (distanceToPlayer <= followDistance && !hasPlayedVideo)
+        {
+            // 第一次检测到玩家，播放视频
+            videoPlayerController.PlayVideo(() =>
+            {
+                // 视频播放完毕后继续游戏逻辑
+                hasPlayedVideo = true;
+            });
+        }
 
         // 如果玩家在跟随距离内，NPC开始跟随玩家
         if (distanceToPlayer <= followDistance && distanceToPlayer > stopDistance)

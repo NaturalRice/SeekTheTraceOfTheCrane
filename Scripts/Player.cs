@@ -87,12 +87,12 @@ public class Player : MonoBehaviour
             if (Input.GetKey(KeyCode.LeftShift))
             {
                 moveScale = 1;
-                moveSpeed = 3;
+                moveSpeed = 10;
             }
             else
             {
                 moveScale = 2;
-                moveSpeed = 10;
+                moveSpeed = 5;
             }
         }
         animator.SetFloat("MoveValue", moveScale);

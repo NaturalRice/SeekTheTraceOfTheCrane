@@ -7,8 +7,10 @@ using System.Collections; // 添加这行
 public class VideoPlayerController : MonoBehaviour
 {
     [SerializeField] private GameObject startScreenCanvas;
-    [SerializeField] private GameObject videoCanvas;
-    [SerializeField] private VideoPlayer videoPlayer;
+    [SerializeField] private GameObject videoCanvas0;
+    [SerializeField] private GameObject videoCanvas1;
+    [SerializeField] private VideoPlayer videoPlayer0;
+    [SerializeField] private VideoPlayer videoPlayer1;
     [SerializeField] private RawImage rawImage;
     [SerializeField] private string mainSceneName = "SampleScene";
     
@@ -25,7 +27,7 @@ public class VideoPlayerController : MonoBehaviour
     private void Start()
     {
         startScreenCanvas.SetActive(true);
-        videoCanvas.SetActive(false);
+        videoCanvas0.SetActive(false);
         hasFinished = false;
         canSkipVideo = false; // 初始不可跳过
 
@@ -34,18 +36,18 @@ public class VideoPlayerController : MonoBehaviour
             backgroundMusic.Stop();
         }
 
-        if (videoPlayer == null)
+        if (videoPlayer0 == null)
         {
             Debug.LogError("VideoPlayer组件未正确设置！");
             return;
         }
 
-        videoPlayer.playOnAwake = false;
-        videoPlayer.isLooping = false;
+        videoPlayer0.playOnAwake = false;
+        videoPlayer0.isLooping = false;
 
-        videoPlayer.prepareCompleted += OnVideoPrepared;
-        videoPlayer.loopPointReached += OnVideoFinished;
-        videoPlayer.errorReceived += OnVideoError;
+        videoPlayer0.prepareCompleted += OnVideoPrepared;
+        videoPlayer0.loopPointReached += OnVideoFinished;
+        videoPlayer0.errorReceived += OnVideoError;
 
         if (rawImage == null)
         {
@@ -53,7 +55,7 @@ public class VideoPlayerController : MonoBehaviour
         }
         else
         {
-            rawImage.texture = videoPlayer.targetTexture;
+            rawImage.texture = videoPlayer0.targetTexture;
         }
     }
 
@@ -77,16 +79,16 @@ public class VideoPlayerController : MonoBehaviour
         if (!canSkipVideo) return;
         
         Debug.Log("跳过视频");
-        videoPlayer.Stop();
+        videoPlayer0.Stop();
         canSkipVideo = false; // 立即禁用跳过
-        OnVideoFinished(videoPlayer);
+        OnVideoFinished(videoPlayer0);
     }
 
     private void StartVideoPlayback()
     {
         startScreenCanvas.SetActive(false);
-        videoCanvas.SetActive(true);
-        videoPlayer.Prepare();
+        videoCanvas0.SetActive(true);
+        videoPlayer0.Prepare();
         Debug.Log("开始准备视频...");
     }
 
@@ -94,7 +96,7 @@ public class VideoPlayerController : MonoBehaviour
     {
         Debug.Log("视频准备完成，开始播放！");
         isVideoPrepared = true;
-        videoPlayer.Play();
+        videoPlayer0.Play();
         isVideoPlaying = true;
         canSkipVideo = true; // 视频开始播放后允许跳过
     }
@@ -104,7 +106,7 @@ public class VideoPlayerController : MonoBehaviour
         Debug.Log("视频播放完毕！");
         hasFinished = true;
         canSkipVideo = false; // 确保跳过功能关闭
-        videoCanvas.SetActive(false);
+        videoCanvas0.SetActive(false);
         
         // 视频结束后开始播放背景音乐
         if(backgroundMusic != null)
@@ -142,7 +144,7 @@ public class VideoPlayerController : MonoBehaviour
     {
         Debug.LogError($"视频播放错误: {message}");
         hasFinished = true;
-        videoCanvas.SetActive(false);
+        videoCanvas0.SetActive(false);
         EnterGame();
     }
 
@@ -164,11 +166,27 @@ public class VideoPlayerController : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (videoPlayer != null)
+        if (videoPlayer0 != null)
         {
-            videoPlayer.prepareCompleted -= OnVideoPrepared;
-            videoPlayer.loopPointReached -= OnVideoFinished;
-            videoPlayer.errorReceived -= OnVideoError;
+            videoPlayer0.prepareCompleted -= OnVideoPrepared;
+            videoPlayer0.loopPointReached -= OnVideoFinished;
+            videoPlayer0.errorReceived -= OnVideoError;
         }
+    }
+    
+    public void PlayVideo(System.Action onComplete)
+    {
+        videoCanvas1.SetActive(true);
+        videoPlayer1.Prepare();
+
+        videoPlayer1.prepareCompleted += (source) =>
+        {
+            videoPlayer1.Play();
+            videoPlayer1.loopPointReached += (source) =>
+            {
+                videoCanvas1.SetActive(false);
+                onComplete?.Invoke(); // 调用回调函数
+            };
+        };
     }
 }
