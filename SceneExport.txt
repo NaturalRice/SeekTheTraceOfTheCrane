@@ -1,19 +1,589 @@
-游戏对象: GameManager
+游戏对象: 铁矿 (1)
 - 组件:
   - Transform
-  - GameManager
-  - AudioSource
-  - InventoryManager
-  - PlantManager
-  - CraftingManager
-  - VideoPlayerController
-  - StartScreen
+  - SpriteRenderer
+  - BoxCollider2D
+  - Rigidbody2D
+  - IronOreBlock
+
+游戏对象: 碎石墙 (1)
+- 组件:
+  - Transform
+  - SpriteRenderer
+  - BoxCollider2D
+  - Rigidbody2D
+  - RockBlock
+
+游戏对象: 碎石墙
+- 组件:
+  - Transform
+  - SpriteRenderer
+  - BoxCollider2D
+  - Rigidbody2D
+  - RockBlock
+
+游戏对象: NumberText
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - TextMeshProUGUI
+
+游戏对象: NumberBg
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - Image
+子对象: NumberText
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - TextMeshProUGUI
+
+游戏对象: CountText
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - TextMeshProUGUI
 
 游戏对象: Icon
 - 组件:
   - RectTransform
   - CanvasRenderer
   - Image
+
+游戏对象: ToolbarSlotUI (7)
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - Image
+  - ToolbarSlotUI
+子对象: Icon
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - Image
+子对象: CountText
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - TextMeshProUGUI
+子对象: NumberBg
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - Image
+
+游戏对象: 铁矿 (2)
+- 组件:
+  - Transform
+  - SpriteRenderer
+  - BoxCollider2D
+  - Rigidbody2D
+  - IronOreBlock
+
+游戏对象: 树1 (2)
+- 组件:
+  - Transform
+  - SpriteRenderer
+  - BoxCollider2D
+  - Rigidbody2D
+  - TreeBlock
+
+游戏对象: NumberText
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - TextMeshProUGUI
+
+游戏对象: NumberBg
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - Image
+子对象: NumberText
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - TextMeshProUGUI
+
+游戏对象: CountText
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - TextMeshProUGUI
+
+游戏对象: Icon
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - Image
+
+游戏对象: ToolbarSlotUI
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - Image
+  - ToolbarSlotUI
+子对象: Icon
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - Image
+子对象: CountText
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - TextMeshProUGUI
+子对象: NumberBg
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - Image
+
+游戏对象: NumberText
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - TextMeshProUGUI
+
+游戏对象: NumberBg
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - Image
+子对象: NumberText
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - TextMeshProUGUI
+
+游戏对象: CountText
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - TextMeshProUGUI
+
+游戏对象: Icon
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - Image
+
+游戏对象: ToolbarSlotUI (1)
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - Image
+  - ToolbarSlotUI
+子对象: Icon
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - Image
+子对象: CountText
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - TextMeshProUGUI
+子对象: NumberBg
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - Image
+
+游戏对象: NumberText
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - TextMeshProUGUI
+
+游戏对象: NumberBg
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - Image
+子对象: NumberText
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - TextMeshProUGUI
+
+游戏对象: CountText
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - TextMeshProUGUI
+
+游戏对象: Icon
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - Image
+
+游戏对象: ToolbarSlotUI (8)
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - Image
+  - ToolbarSlotUI
+子对象: Icon
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - Image
+子对象: CountText
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - TextMeshProUGUI
+子对象: NumberBg
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - Image
+
+游戏对象: NumberText
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - TextMeshProUGUI
+
+游戏对象: NumberBg
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - Image
+子对象: NumberText
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - TextMeshProUGUI
+
+游戏对象: CountText
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - TextMeshProUGUI
+
+游戏对象: Icon
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - Image
+
+游戏对象: ToolbarSlotUI (5)
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - Image
+  - ToolbarSlotUI
+子对象: Icon
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - Image
+子对象: CountText
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - TextMeshProUGUI
+子对象: NumberBg
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - Image
+
+游戏对象: 碎石墙 (2)
+- 组件:
+  - Transform
+  - SpriteRenderer
+  - BoxCollider2D
+  - Rigidbody2D
+  - RockBlock
+
+游戏对象: 石头 (2)
+- 组件:
+  - Transform
+  - SpriteRenderer
+  - BoxCollider2D
+  - Rigidbody2D
+  - RockBlock
+
+游戏对象: 灵气
+- 组件:
+  - Transform
+  - SpriteRenderer
+  - BoxCollider2D
+  - Rigidbody2D
+  - Pickable
+
+游戏对象: 树1
+- 组件:
+  - Transform
+  - SpriteRenderer
+  - BoxCollider2D
+  - Rigidbody2D
+  - TreeBlock
+
+游戏对象: 石头 (4)
+- 组件:
+  - Transform
+  - SpriteRenderer
+  - BoxCollider2D
+  - Rigidbody2D
+  - RockBlock
+
+游戏对象: NumberText
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - TextMeshProUGUI
+
+游戏对象: NumberBg
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - Image
+子对象: NumberText
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - TextMeshProUGUI
+
+游戏对象: CountText
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - TextMeshProUGUI
+
+游戏对象: Icon
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - Image
+
+游戏对象: ToolbarSlotUI (2)
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - Image
+  - ToolbarSlotUI
+子对象: Icon
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - Image
+子对象: CountText
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - TextMeshProUGUI
+子对象: NumberBg
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - Image
+
+游戏对象: 石头 (3)
+- 组件:
+  - Transform
+  - SpriteRenderer
+  - BoxCollider2D
+  - Rigidbody2D
+  - RockBlock
+
+游戏对象: 破旧的短剑
+- 组件:
+  - Transform
+  - SpriteRenderer
+  - BoxCollider2D
+  - Rigidbody2D
+  - Pickable
+
+游戏对象: 石头
+- 组件:
+  - Transform
+  - SpriteRenderer
+  - BoxCollider2D
+  - Rigidbody2D
+  - RockBlock
+
+游戏对象: 树1 (1)
+- 组件:
+  - Transform
+  - SpriteRenderer
+  - BoxCollider2D
+  - Rigidbody2D
+  - TreeBlock
+
+游戏对象: NumberText
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - TextMeshProUGUI
+
+游戏对象: NumberBg
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - Image
+子对象: NumberText
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - TextMeshProUGUI
+
+游戏对象: CountText
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - TextMeshProUGUI
+
+游戏对象: Icon
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - Image
+
+游戏对象: ToolbarSlotUI (4)
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - Image
+  - ToolbarSlotUI
+子对象: Icon
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - Image
+子对象: CountText
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - TextMeshProUGUI
+子对象: NumberBg
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - Image
+
+游戏对象: NumberText
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - TextMeshProUGUI
+
+游戏对象: NumberBg
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - Image
+子对象: NumberText
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - TextMeshProUGUI
+
+游戏对象: CountText
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - TextMeshProUGUI
+
+游戏对象: Icon
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - Image
+
+游戏对象: ToolbarSlotUI (3)
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - Image
+  - ToolbarSlotUI
+子对象: Icon
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - Image
+子对象: CountText
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - TextMeshProUGUI
+子对象: NumberBg
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - Image
+
+游戏对象: 石头 (1)
+- 组件:
+  - Transform
+  - SpriteRenderer
+  - BoxCollider2D
+  - Rigidbody2D
+  - RockBlock
+
+游戏对象: NumberText
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - TextMeshProUGUI
+
+游戏对象: NumberBg
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - Image
+子对象: NumberText
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - TextMeshProUGUI
+
+游戏对象: CountText
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - TextMeshProUGUI
+
+游戏对象: Icon
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - Image
+
+游戏对象: ToolbarSlotUI (6)
+- 组件:
+  - RectTransform
+  - CanvasRenderer
+  - Image
+  - ToolbarSlotUI
+子对象: Icon
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - Image
+子对象: CountText
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - TextMeshProUGUI
+子对象: NumberBg
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - Image
+
+游戏对象: 铁矿
+- 组件:
+  - Transform
+  - SpriteRenderer
+  - BoxCollider2D
+  - Rigidbody2D
+  - IronOreBlock
 
 游戏对象: Panel_Talk
 - 组件:
@@ -63,64 +633,11 @@
   - 组件:
     - RectTransform
 
-游戏对象: 树1 (1)
-- 组件:
-  - Transform
-  - SpriteRenderer
-  - BoxCollider2D
-  - Rigidbody2D
-  - TreeBlock
-
-游戏对象: 灵气
-- 组件:
-  - Transform
-  - SpriteRenderer
-  - BoxCollider2D
-  - Rigidbody2D
-  - Pickable
-
-游戏对象: 铁矿 (1)
-- 组件:
-  - Transform
-  - SpriteRenderer
-  - BoxCollider2D
-  - Rigidbody2D
-  - IronOreBlock
-
 游戏对象: Text (TMP)
 - 组件:
   - RectTransform
   - CanvasRenderer
   - TextMeshProUGUI
-
-游戏对象: NumberText
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - TextMeshProUGUI
-
-游戏对象: NumberText
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - TextMeshProUGUI
-
-游戏对象: CountText
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - TextMeshProUGUI
-
-游戏对象: NumberBg
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - Image
-子对象: NumberText
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - TextMeshProUGUI
 
 游戏对象: Header
 - 组件:
@@ -137,55 +654,23 @@
     - Image
     - Button
 
-游戏对象: NumberText
+游戏对象: GuideButton
 - 组件:
   - RectTransform
   - CanvasRenderer
-  - TextMeshProUGUI
-
-游戏对象: CountText
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - TextMeshProUGUI
-
-游戏对象: NumberText
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - TextMeshProUGUI
-
-游戏对象: CountText
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - TextMeshProUGUI
+  - Image
+  - Button
+子对象: GuideTooltip
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - Text
 
 游戏对象: Tilemap
 - 组件:
   - Transform
   - Tilemap
   - TilemapRenderer
-
-游戏对象: NumberText
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - TextMeshProUGUI
-
-游戏对象: Icon
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - Image
-
-游戏对象: 碎石墙
-- 组件:
-  - Transform
-  - SpriteRenderer
-  - BoxCollider2D
-  - Rigidbody2D
-  - RockBlock
 
 游戏对象: ParentUI
 - 组件:
@@ -215,17 +700,6 @@
     - Rigidbody2D
     - Pickable
 
-游戏对象: NumberBg
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - Image
-子对象: NumberText
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - TextMeshProUGUI
-
 游戏对象: CraftButton
 - 组件:
   - RectTransform
@@ -237,28 +711,6 @@
     - RectTransform
     - CanvasRenderer
     - TextMeshProUGUI
-
-游戏对象: ToolbarSlotUI (2)
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - Image
-  - ToolbarSlotUI
-子对象: Icon
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - Image
-子对象: CountText
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - TextMeshProUGUI
-子对象: NumberBg
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - Image
 
 游戏对象: Virtual Camera
 - 组件:
@@ -272,55 +724,15 @@
     - CinemachineComposer
     - CinemachineTransposer
 
-游戏对象: Icon
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - Image
-
-游戏对象: ToolbarSlotUI (1)
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - Image
-  - ToolbarSlotUI
-子对象: Icon
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - Image
-子对象: CountText
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - TextMeshProUGUI
-子对象: NumberBg
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - Image
-
 游戏对象: Buildings
 - 组件:
   - Transform
-
-游戏对象: CountText
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - TextMeshProUGUI
 
 游戏对象: Text (TMP)
 - 组件:
   - RectTransform
   - CanvasRenderer
   - TextMeshProUGUI
-
-游戏对象: Icon
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - Image
 
 游戏对象: Main Camera
 - 组件:
@@ -333,12 +745,6 @@
     - Transform
     - CinemachinePipeline
 
-游戏对象: Icon
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - Image
-
 游戏对象: Text (TMP)
 - 组件:
   - RectTransform
@@ -350,12 +756,6 @@
   - RectTransform
   - CanvasRenderer
   - TextMeshProUGUI
-
-游戏对象: Icon
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - Image
 
 游戏对象: CategoryButton (2)
 - 组件:
@@ -371,39 +771,6 @@
     - RectTransform
     - CanvasRenderer
     - TextMeshProUGUI
-
-游戏对象: NumberBg
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - Image
-子对象: NumberText
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - TextMeshProUGUI
-
-游戏对象: ToolbarSlotUI (6)
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - Image
-  - ToolbarSlotUI
-子对象: Icon
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - Image
-子对象: CountText
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - TextMeshProUGUI
-子对象: NumberBg
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - Image
 
 游戏对象: SceneExporter
 - 组件:
@@ -431,23 +798,6 @@
   - Tilemap
   - TilemapRenderer
 
-游戏对象: CountText
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - TextMeshProUGUI
-
-游戏对象: NumberBg
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - Image
-子对象: NumberText
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - TextMeshProUGUI
-
 游戏对象: Text (TMP)
 - 组件:
   - RectTransform
@@ -465,66 +815,6 @@
   - RectTransform
   - CanvasRenderer
   - Image
-
-游戏对象: 树1 (2)
-- 组件:
-  - Transform
-  - SpriteRenderer
-  - BoxCollider2D
-  - Rigidbody2D
-  - TreeBlock
-
-游戏对象: NumberBg
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - Image
-子对象: NumberText
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - TextMeshProUGUI
-
-游戏对象: 铁矿
-- 组件:
-  - Transform
-  - SpriteRenderer
-  - BoxCollider2D
-  - Rigidbody2D
-  - IronOreBlock
-
-游戏对象: NumberBg
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - Image
-子对象: NumberText
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - TextMeshProUGUI
-
-游戏对象: 破旧的短剑
-- 组件:
-  - Transform
-  - SpriteRenderer
-  - BoxCollider2D
-  - Rigidbody2D
-  - Pickable
-
-游戏对象: NumberText
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - TextMeshProUGUI
-
-游戏对象: 树1
-- 组件:
-  - Transform
-  - SpriteRenderer
-  - BoxCollider2D
-  - Rigidbody2D
-  - TreeBlock
 
 游戏对象: CraftingPanel
 - 组件:
@@ -555,62 +845,16 @@
     - RectTransform
     - HorizontalLayoutGroup
 
-游戏对象: 铁矿 (2)
-- 组件:
-  - Transform
-  - SpriteRenderer
-  - BoxCollider2D
-  - Rigidbody2D
-  - IronOreBlock
-
 游戏对象: Text (TMP)
 - 组件:
   - RectTransform
   - CanvasRenderer
   - TextMeshProUGUI
-
-游戏对象: ToolbarSlotUI
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - Image
-  - ToolbarSlotUI
-子对象: Icon
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - Image
-子对象: CountText
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - TextMeshProUGUI
-子对象: NumberBg
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - Image
 
 游戏对象: Monsters
 - 组件:
   - Transform
 
-游戏对象: 石头 (3)
-- 组件:
-  - Transform
-  - SpriteRenderer
-  - BoxCollider2D
-  - Rigidbody2D
-  - RockBlock
-
-游戏对象: 石头 (2)
-- 组件:
-  - Transform
-  - SpriteRenderer
-  - BoxCollider2D
-  - Rigidbody2D
-  - RockBlock
-
 游戏对象: Text (TMP)
 - 组件:
   - RectTransform
@@ -622,95 +866,16 @@
   - RectTransform
   - CanvasRenderer
   - TextMeshProUGUI
-
-游戏对象: CountText
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - TextMeshProUGUI
-
-游戏对象: ToolbarSlotUI (5)
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - Image
-  - ToolbarSlotUI
-子对象: Icon
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - Image
-子对象: CountText
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - TextMeshProUGUI
-子对象: NumberBg
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - Image
 
 游戏对象: ClimbAreas
 - 组件:
   - Transform
-
-游戏对象: 石头 (1)
-- 组件:
-  - Transform
-  - SpriteRenderer
-  - BoxCollider2D
-  - Rigidbody2D
-  - RockBlock
-
-游戏对象: NumberBg
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - Image
-子对象: NumberText
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - TextMeshProUGUI
-
-游戏对象: 碎石墙 (2)
-- 组件:
-  - Transform
-  - SpriteRenderer
-  - BoxCollider2D
-  - Rigidbody2D
-  - RockBlock
 
 游戏对象: Background
 - 组件:
   - RectTransform
   - CanvasRenderer
   - Image
-
-游戏对象: 石头 (4)
-- 组件:
-  - Transform
-  - SpriteRenderer
-  - BoxCollider2D
-  - Rigidbody2D
-  - RockBlock
-
-游戏对象: 碎石墙 (1)
-- 组件:
-  - Transform
-  - SpriteRenderer
-  - BoxCollider2D
-  - Rigidbody2D
-  - RockBlock
-
-游戏对象: 石头
-- 组件:
-  - Transform
-  - SpriteRenderer
-  - BoxCollider2D
-  - Rigidbody2D
-  - RockBlock
 
 游戏对象: Footer
 - 组件:
@@ -738,38 +903,17 @@
     - CanvasRenderer
     - TextMeshProUGUI
 
-游戏对象: ToolbarSlotUI (4)
+游戏对象: QuestButton
 - 组件:
   - RectTransform
   - CanvasRenderer
   - Image
-  - ToolbarSlotUI
-子对象: Icon
+  - Button
+子对象: QuestTooltip
   - 组件:
     - RectTransform
     - CanvasRenderer
-    - Image
-子对象: CountText
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - TextMeshProUGUI
-子对象: NumberBg
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - Image
-
-游戏对象: NumberBg
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - Image
-子对象: NumberText
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - TextMeshProUGUI
+    - Text
 
 游戏对象: Items
 - 组件:
@@ -783,17 +927,6 @@
 子对象: Weapon
   - 组件:
     - Transform
-
-游戏对象: NumberBg
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - Image
-子对象: NumberText
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - TextMeshProUGUI
 
 游戏对象: CategoryButton (3)
 - 组件:
@@ -869,18 +1002,6 @@
 子对象: ParentUI
   - 组件:
     - RectTransform
-
-游戏对象: Icon
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - Image
-
-游戏对象: NumberText
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - TextMeshProUGUI
 
 游戏对象: NPC
 - 组件:
@@ -964,12 +1085,6 @@
 - 组件:
   - Transform
 
-游戏对象: Icon
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - Image
-
 游戏对象: CategoryButton (7)
 - 组件:
   - RectTransform
@@ -985,24 +1100,6 @@
     - CanvasRenderer
     - TextMeshProUGUI
 
-游戏对象: CountText
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - TextMeshProUGUI
-
-游戏对象: NumberText
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - TextMeshProUGUI
-
-游戏对象: NumberText
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - TextMeshProUGUI
-
 游戏对象: CloseButton
 - 组件:
   - RectTransform
@@ -1014,34 +1111,6 @@
     - RectTransform
     - CanvasRenderer
     - TextMeshProUGUI
-
-游戏对象: ToolbarSlotUI (8)
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - Image
-  - ToolbarSlotUI
-子对象: Icon
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - Image
-子对象: CountText
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - TextMeshProUGUI
-子对象: NumberBg
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - Image
-
-游戏对象: Icon
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - Image
 
 游戏对象: cm
 - 组件:
@@ -1093,24 +1162,12 @@
     - Image
     - ContentSizeFitter
     - CraftingUI
-
-游戏对象: ToolbarSlotUI (7)
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - Image
-  - ToolbarSlotUI
-子对象: Icon
+子对象: QuestPanel
   - 组件:
     - RectTransform
     - CanvasRenderer
     - Image
-子对象: CountText
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - TextMeshProUGUI
-子对象: NumberBg
+子对象: GuidePanel
   - 组件:
     - RectTransform
     - CanvasRenderer
@@ -1205,12 +1262,6 @@
   - Tilemap
   - TilemapRenderer
 
-游戏对象: CountText
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - TextMeshProUGUI
-
 游戏对象: Layer_1
 - 组件:
   - Transform
@@ -1242,6 +1293,18 @@
     - RectTransform
     - CanvasRenderer
     - Image
+子对象: QuestButton
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - Image
+    - Button
+子对象: GuideButton
+  - 组件:
+    - RectTransform
+    - CanvasRenderer
+    - Image
+    - Button
 
 游戏对象: EventSystem
 - 组件:
@@ -1272,12 +1335,6 @@
     - RectTransform
     - CanvasRenderer
     - TextMeshProUGUI
-
-游戏对象: CountText
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - TextMeshProUGUI
 
 游戏对象: ContentList
 - 组件:
@@ -1348,28 +1405,6 @@
   - CraftingManager
   - VideoPlayerController
   - StartScreen
-
-游戏对象: ToolbarSlotUI (3)
-- 组件:
-  - RectTransform
-  - CanvasRenderer
-  - Image
-  - ToolbarSlotUI
-子对象: Icon
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - Image
-子对象: CountText
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - TextMeshProUGUI
-子对象: NumberBg
-  - 组件:
-    - RectTransform
-    - CanvasRenderer
-    - Image
 
 游戏对象: ItemMoveHandler
 - 组件:

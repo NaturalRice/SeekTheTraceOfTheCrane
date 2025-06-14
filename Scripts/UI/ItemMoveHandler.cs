@@ -115,10 +115,24 @@ public class ItemMoveHandler : MonoBehaviour
     }
 
     // 显示物品图标的方法
-    void ShowIcon(Sprite sprite)
+    public void ShowIcon(Sprite sprite)
     {
+        if (icon == null || icon.gameObject == null) 
+        {
+            icon = CreateNewIcon(); // 动态重建图标
+            return;
+        }
+    
         icon.sprite = sprite;
         icon.enabled = true;
+    }
+    
+    private Image CreateNewIcon()
+    {
+        GameObject iconObj = new GameObject("DragIcon");
+        iconObj.transform.SetParent(transform);
+        // 复制原有RectTransform设置
+        return iconObj.AddComponent<Image>();
     }
 
     // 清空手上的物品的方法
@@ -135,6 +149,10 @@ public class ItemMoveHandler : MonoBehaviour
     void ClearHandForced()
     {
         HideIcon();
+        if (icon != null && icon.gameObject != null) 
+        {
+            icon.enabled = false;
+        }
         selectedSlotData = null;
     }
 

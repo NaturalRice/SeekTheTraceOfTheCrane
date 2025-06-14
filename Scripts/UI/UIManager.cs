@@ -21,11 +21,24 @@ public class UIManager : MonoBehaviour
     public GameObject TalkPanelGo6;//程老
     
     public Image hpColorImage; // 新增-用于颜色变化的血条图
+    
+    // 面板引用
+    public GameObject questPanel;
+    public GameObject guidePanel;
+    // 按钮引用
+    public Button questButton;
+    public Button guideButton;
+    public Button questPanelCloseButton;
+    public Button guidePanelCloseButton;
 
     void Awake()
     {
         // 确保所有对话面板初始关闭
         TalkPanelGo0.SetActive(false);
+        
+        // 默认隐藏面板
+        questPanel.SetActive(false);
+        guidePanel.SetActive(false);
         
         originalSize = hpMaskImage.rectTransform.rect.width;
         SetHPValue(1);
@@ -38,6 +51,41 @@ public class UIManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+    
+    // 显示任务面板
+    public void ShowQuestPanel()
+    {
+        questPanel.SetActive(true);
+    }
+
+    // 隐藏任务面板
+    public void HideQuestPanel()
+    {
+        questPanel.SetActive(false);
+    }
+
+    // 显示指南面板
+    public void ShowGuidePanel()
+    {
+        guidePanel.SetActive(true);
+    }
+
+    // 隐藏指南面板
+    public void HideGuidePanel()
+    {
+        guidePanel.SetActive(false);
+    }
+    
+    private void Start()
+    {
+        // 绑定按钮事件
+        questButton.onClick.AddListener(ShowQuestPanel);
+        guideButton.onClick.AddListener(ShowGuidePanel);
+
+        // 绑定关闭按钮事件
+        questPanelCloseButton.onClick.AddListener(HideQuestPanel);
+        guidePanelCloseButton.onClick.AddListener(HideGuidePanel);
     }
 
     /// <summary>
